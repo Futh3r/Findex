@@ -244,7 +244,7 @@
       <a href="index.html#planes">Planes</a>
     </nav>
 
-    <div class="nav-actions">
+    <div class="nav-actions" id="navActions"></div>
       <a class="btn btn-ghost" href="index.html">Volver</a>
     </div>
   </header>
@@ -327,6 +327,12 @@
 
   <script src="data.js"></script>
   <script>
+    // Corrección 3: Verificar sesión al cargar
+    const existingUser = getCurrentUser();
+    if (existingUser) {
+      window.location.href = isAdmin(existingUser) ? "admin.html" : "dashboard.html";
+    }
+
     const registerTab = document.getElementById("registerTab");
     const loginTab = document.getElementById("loginTab");
     const authForm = document.getElementById("authForm");
@@ -379,6 +385,7 @@
         ? "Empieza con una cuenta y luego elige tu plan."
         : "Entra a tu panel y administra tu negocio.";
 
+      // Corrección 4: Texto del hint actualizado
       passwordHint.textContent = isRegister
         ? "Usa una contraseña segura."
         : "Escribe la contraseña de tu cuenta.";
@@ -397,9 +404,6 @@
 
       clearMessages();
       authForm.reset();
-
-      nameField.style.display = isRegister ? "flex" : "none";
-      confirmPasswordField.style.display = isRegister ? "flex" : "none";
     }
 
     function redirectAfterLogin(user) {
@@ -467,5 +471,9 @@
 
     setMode("register");
   </script>
+  <script>
+  renderSessionNav("navActions");
+</script>
+
 </body>
 </html>

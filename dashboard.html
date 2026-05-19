@@ -212,7 +212,7 @@
       <a href="planes.html">Planes</a>
     </nav>
 
-    <div class="nav-actions">
+    <div class="nav-actions" id="navActions"></div>
       <button class="btn btn-ghost" id="logoutBtn" type="button">Cerrar sesión</button>
       <a class="btn btn-primary" href="registrar.html">Nuevo negocio</a>
     </div>
@@ -498,5 +498,8 @@
 
     renderMyBusinesses();
   </script>
+  <script>
+  renderSessionNav("navActions");
+</script>
 </body>
 </html>

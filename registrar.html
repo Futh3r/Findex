@@ -100,7 +100,7 @@
       <a href="index.html#planes">Planes</a>
     </nav>
 
-    <div class="nav-actions">
+    <div class="nav-actions" id="navActions"></div>
       <button class="btn btn-ghost" onclick="history.back()">Volver</button>
     </div>
   </header>
@@ -194,5 +194,8 @@
       window.location.href = `negocio.html?id=${newBusiness.id}`;
     });
   </script>
+  <script>
+  renderSessionNav("navActions");
+</script>
 </body>
 </html>

@@ -309,3 +309,36 @@ function isAdmin(user) {
 }
 
 ensureAdminUser();
+
+function getDashboardUrl(user) {
+  return isAdmin(user) ? "admin.html" : "dashboard.html";
+}
+
+function renderSessionNav(containerId = "navActions") {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const user = getCurrentUser();
+
+  if (!user) {
+    container.innerHTML = `
+      <a class="btn btn-ghost" href="auth.html">Iniciar sesión</a>
+      <a class="btn btn-primary" href="auth.html">Registrar negocio</a>
+    `;
+    return;
+  }
+
+  const panelUrl = getDashboardUrl(user);
+
+  container.innerHTML = `
+  <span style="color:#94a3b8; font-weight:600;">${user.name}</span>
+  <a class="btn btn-ghost" href="${panelUrl}">Panel</a>
+  <button class="btn btn-primary" id="logoutBtn">Cerrar</button>
+`;
+
+  const logoutBtn = document.getElementById("logoutBtn");
+  logoutBtn.addEventListener("click", () => {
+    clearSession();
+    window.location.href = "index.html";
+  });
+}

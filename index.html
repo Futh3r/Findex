@@ -25,10 +25,7 @@
       <a href="#nosotros">Nosotros</a>
     </nav>
 
-    <div class="nav-actions">
-      <a class="btn btn-ghost" href="auth.html">Iniciar sesión</a>
-      <a class="btn btn-primary" href="auth.html">Registrar negocio</a>
-    </div>
+    <div class="nav-actions" id="navActions"></div>
   </header>
 
   <main>
@@ -179,5 +176,8 @@
 
   <script src="data.js"></script>
   <script src="script.js"></script>
+  <script>
+    renderSessionNav("navActions");
+  </script>
 </body>
 </html>
