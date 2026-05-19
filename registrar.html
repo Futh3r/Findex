@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrar negocio | Findex</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .form-wrap{
+      width:min(900px, calc(100% - 32px));
+      margin:0 auto;
+      padding:40px 0 48px;
+    }
+
+    .form-card{
+      background:rgba(15,23,42,0.9);
+      border:1px solid rgba(148,163,184,0.16);
+      border-radius:28px;
+      padding:28px;
+      box-shadow:0 24px 80px rgba(0,0,0,0.35);
+    }
+
+    .form-card h1{
+      font-size:2rem;
+      margin-bottom:10px;
+    }
+
+    .form-card p{
+      color:#94a3b8;
+      margin-bottom:24px;
+      line-height:1.7;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:16px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    .field label{
+      font-size:0.9rem;
+      color:#cbd5e1;
+      font-weight:600;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,0.16);
+      background:rgba(255,255,255,0.03);
+      color:#e5eefc;
+      padding:14px 16px;
+      outline:none;
+    }
+
+    .field textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    .form-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    @media (max-width: 700px){
+      .form-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <span class="brand-name">FINDEX</span>
+    </div>
+
+    <nav class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="index.html#categorias">Categorías</a>
+      <a href="index.html#planes">Planes</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="btn btn-ghost" onclick="history.back()">Volver</button>
+    </div>
+  </header>
+
+  <main class="form-wrap">
+    <section class="form-card">
+      <h1>Registrar negocio</h1>
+      <p>Agrega un negocio a la plataforma. Al guardar, aparecerá en el directorio principal.</p>
+
+      <form id="businessForm" class="form-grid">
+        <div class="field">
+          <label for="nombre">Nombre del negocio</label>
+          <input id="nombre" required type="text" placeholder="Ej: Panadería La Esquina" />
+        </div>
+
+        <div class="field">
+          <label for="categoria">Categoría</label>
+          <select id="categoria" required>
+            <option value="">Selecciona una categoría</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="ubicacion">Ubicación</label>
+          <input id="ubicacion" required type="text" placeholder="Ej: San José, Centro" />
+        </div>
+
+        <div class="field">
+          <label for="telefono">Teléfono / WhatsApp</label>
+          <input id="telefono" required type="text" placeholder="50688888888" />
+        </div>
+
+        <div class="field">
+          <label for="horario">Horario</label>
+          <input id="horario" required type="text" placeholder="Ej: 8:00 AM - 6:00 PM" />
+        </div>
+
+        <div class="field">
+          <label for="imagen">URL de imagen</label>
+          <input id="imagen" required type="url" placeholder="https://..." />
+        </div>
+
+        <div class="field full">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" required placeholder="Describe el negocio, lo que ofrece y por qué destaca."></textarea>
+        </div>
+
+        <div class="field full">
+          <label for="sitio">Sitio web (opcional)</label>
+          <input id="sitio" type="url" placeholder="https://..." />
+        </div>
+
+        <div class="field full">
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Guardar negocio</button>
+            <a class="btn btn-ghost" href="index.html">Cancelar</a>
+          </div>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script>
+    const categorySelect = document.getElementById("categoria");
+    const form = document.getElementById("businessForm");
+
+    categories.forEach(cat => {
+      const option = document.createElement("option");
+      option.value = cat.key;
+      option.textContent = cat.label;
+      categorySelect.appendChild(option);
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const newBusiness = addBusiness({
+        nombre: document.getElementById("nombre").value.trim(),
+        categoria: document.getElementById("categoria").value,
+        categoriaLabel: getCategoryLabel(document.getElementById("categoria").value),
+        ubicacion: document.getElementById("ubicacion").value.trim(),
+        descripcion: document.getElementById("descripcion").value.trim(),
+        imagen: document.getElementById("imagen").value.trim(),
+        horario: document.getElementById("horario").value.trim(),
+        telefono: document.getElementById("telefono").value.trim(),
+        whatsapp: document.getElementById("telefono").value.trim(),
+        sitio: document.getElementById("sitio").value.trim() || "https://example.com"
+      });
+
+      window.location.href = `negocio.html?id=${newBusiness.id}`;
+    });
+  </script>
+</body>
+</html>

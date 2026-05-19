@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acceso | Findex</title>
+  <meta name="description" content="Crea tu cuenta o inicia sesión para administrar tu negocio en Findex." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    .auth-wrap{
+      width:min(1180px, calc(100% - 32px));
+      margin:0 auto;
+      padding:38px 0 48px;
+      display:grid;
+      grid-template-columns:1.05fr 0.95fr;
+      gap:22px;
+      align-items:stretch;
+    }
+
+    .auth-hero,
+    .auth-card{
+      border-radius:28px;
+      border:1px solid rgba(148,163,184,0.16);
+      background:rgba(15,23,42,0.88);
+      box-shadow:0 24px 80px rgba(0,0,0,0.32);
+      overflow:hidden;
+    }
+
+    .auth-hero{
+      position:relative;
+      padding:34px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:26px;
+      background:
+        radial-gradient(circle at top right, rgba(46,229,157,0.14), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(56,189,248,0.08), transparent 20%),
+        rgba(15,23,42,0.88);
+    }
+
+    .auth-hero h1{
+      font-size:clamp(2.2rem, 4.4vw, 4rem);
+      line-height:0.98;
+      letter-spacing:-0.04em;
+      margin-bottom:14px;
+      max-width:12ch;
+    }
+
+    .auth-hero h1 span{
+      color:#2ee59d;
+    }
+
+    .auth-hero p{
+      color:#94a3b8;
+      line-height:1.8;
+      max-width:44ch;
+      font-size:1rem;
+    }
+
+    .auth-badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .auth-badges span{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(46,229,157,0.18);
+      background:rgba(46,229,157,0.08);
+      color:#2ee59d;
+      font-weight:700;
+      font-size:0.9rem;
+    }
+
+    .auth-card{
+      padding:26px;
+    }
+
+    .auth-card-top{
+      margin-bottom:18px;
+    }
+
+    .auth-card-top h2{
+      font-size:1.7rem;
+      margin-bottom:10px;
+    }
+
+    .auth-card-top p{
+      color:#94a3b8;
+      line-height:1.7;
+    }
+
+    .tabs{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-bottom:22px;
+      padding:6px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+    }
+
+    .tab-btn{
+      border:none;
+      padding:14px 16px;
+      border-radius:14px;
+      cursor:pointer;
+      background:transparent;
+      color:#cbd5e1;
+      font-weight:700;
+      transition:0.2s ease;
+    }
+
+    .tab-btn.active{
+      background:linear-gradient(135deg, #2ee59d, #6af0ba);
+      color:#02110b;
+      box-shadow:0 12px 24px rgba(46,229,157,0.16);
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-bottom:14px;
+      position:relative;
+    }
+
+    .field label{
+      color:#cbd5e1;
+      font-size:0.92rem;
+      font-weight:600;
+    }
+
+    .field input{
+      width:100%;
+      padding:14px 16px;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,0.16);
+      background:rgba(255,255,255,0.03);
+      color:#e5eefc;
+      outline:none;
+      transition:0.2s ease;
+    }
+
+    .field input:focus{
+      border-color:rgba(46,229,157,0.35);
+      box-shadow:0 0 0 4px rgba(46,229,157,0.08);
+    }
+
+    .password-wrap{
+      position:relative;
+    }
+
+    .toggle-pass{
+      position:absolute;
+      right:10px;
+      top:50%;
+      transform:translateY(-50%);
+      border:none;
+      background:rgba(255,255,255,0.06);
+      color:#e5eefc;
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+      font-size:0.86rem;
+    }
+
+    .auth-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .auth-note{
+      margin-top:16px;
+      color:#94a3b8;
+      font-size:0.92rem;
+      line-height:1.65;
+    }
+
+    .auth-error,
+    .auth-success{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      display:none;
+      line-height:1.6;
+      font-size:0.94rem;
+    }
+
+    .auth-error{
+      background:rgba(239,68,68,0.12);
+      color:#fecaca;
+      border:1px solid rgba(239,68,68,0.18);
+    }
+
+    .auth-success{
+      background:rgba(46,229,157,0.1);
+      color:#2ee59d;
+      border:1px solid rgba(46,229,157,0.16);
+    }
+
+    .mini-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-top:6px;
+      color:#94a3b8;
+      font-size:0.88rem;
+    }
+
+    .mini-link{
+      color:#2ee59d;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    @media (max-width: 980px){
+      .auth-wrap{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <span class="brand-name">FINDEX</span>
+    </div>
+
+    <nav class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="index.html#categorias">Categorías</a>
+      <a href="index.html#planes">Planes</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a class="btn btn-ghost" href="index.html">Volver</a>
+    </div>
+  </header>
+
+  <main class="auth-wrap">
+    <section class="auth-hero">
+      <div>
+        <div class="eyebrow">Acceso seguro</div>
+        <h1>Crea tu cuenta y gestiona <span>tu negocio</span>.</h1>
+        <p>
+          Regístrate, inicia sesión y elige el plan adecuado para publicar tu negocio
+          con una presencia seria, moderna y lista para crecer.
+        </p>
+      </div>
+
+      <div class="auth-badges">
+        <span>Registro</span>
+        <span>Inicio de sesión</span>
+        <span>Planes</span>
+        <span>Panel personal</span>
+      </div>
+    </section>
+
+    <section class="auth-card">
+      <div class="auth-card-top">
+        <h2 id="formTitle">Crear cuenta</h2>
+        <p id="formSubtitle">Empieza con una cuenta y luego elige tu plan.</p>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" id="registerTab" type="button">Crear cuenta</button>
+        <button class="tab-btn" id="loginTab" type="button">Iniciar sesión</button>
+      </div>
+
+      <form id="authForm" autocomplete="on">
+        <div id="nameField" class="field">
+          <label for="name">Nombre</label>
+          <input id="name" type="text" placeholder="Tu nombre" />
+        </div>
+
+        <div class="field">
+          <label for="email">Correo</label>
+          <input id="email" type="email" placeholder="tu@correo.com" required />
+        </div>
+
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <div class="password-wrap">
+            <input id="password" type="password" placeholder="••••••••" required />
+            <button class="toggle-pass" type="button" data-target="password">Ver</button>
+          </div>
+        </div>
+
+        <div id="confirmPasswordField" class="field">
+          <label for="confirmPassword">Repetir contraseña</label>
+          <div class="password-wrap">
+            <input id="confirmPassword" type="password" placeholder="••••••••" />
+            <button class="toggle-pass" type="button" data-target="confirmPassword">Ver</button>
+          </div>
+        </div>
+
+        <div class="mini-row">
+          <span id="passwordHint">Usa una contraseña segura.</span>
+          <span class="mini-link" id="switchModeLink">Cambiar a iniciar sesión</span>
+        </div>
+
+        <div class="auth-actions">
+          <button class="btn btn-primary" id="submitBtn" type="submit">Crear cuenta</button>
+        </div>
+
+        <div class="auth-note" id="authNote">
+          Si el correo ya existe, el sistema te dirá que esa cuenta ya está registrada.
+        </div>
+
+        <div id="authError" class="auth-error"></div>
+        <div id="authSuccess" class="auth-success"></div>
+      </form>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script>
+    const registerTab = document.getElementById("registerTab");
+    const loginTab = document.getElementById("loginTab");
+    const authForm = document.getElementById("authForm");
+    const nameField = document.getElementById("nameField");
+    const confirmPasswordField = document.getElementById("confirmPasswordField");
+    const submitBtn = document.getElementById("submitBtn");
+    const authError = document.getElementById("authError");
+    const authSuccess = document.getElementById("authSuccess");
+    const formTitle = document.getElementById("formTitle");
+    const formSubtitle = document.getElementById("formSubtitle");
+    const switchModeLink = document.getElementById("switchModeLink");
+    const passwordHint = document.getElementById("passwordHint");
+    const authNote = document.getElementById("authNote");
+
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+
+    const toggleButtons = document.querySelectorAll(".toggle-pass");
+
+    let mode = "register";
+
+    function showMessage(type, text) {
+      authError.style.display = "none";
+      authSuccess.style.display = "none";
+
+      const el = type === "error" ? authError : authSuccess;
+      el.textContent = text;
+      el.style.display = "block";
+    }
+
+    function clearMessages() {
+      authError.style.display = "none";
+      authSuccess.style.display = "none";
+    }
+
+    function setMode(newMode) {
+      mode = newMode;
+      const isRegister = mode === "register";
+
+      registerTab.classList.toggle("active", isRegister);
+      loginTab.classList.toggle("active", !isRegister);
+
+      nameField.style.display = isRegister ? "flex" : "none";
+      confirmPasswordField.style.display = isRegister ? "flex" : "none";
+      submitBtn.textContent = isRegister ? "Crear cuenta" : "Iniciar sesión";
+      formTitle.textContent = isRegister ? "Crear cuenta" : "Iniciar sesión";
+      formSubtitle.textContent = isRegister
+        ? "Empieza con una cuenta y luego elige tu plan."
+        : "Entra a tu panel y administra tu negocio.";
+
+      passwordHint.textContent = isRegister
+        ? "Usa una contraseña segura."
+        : "Escribe la contraseña de tu cuenta.";
+
+      authNote.textContent = isRegister
+        ? "Si el correo ya existe, el sistema te dirá que esa cuenta ya está registrada."
+        : "Si la contraseña está mal, el sistema te lo avisará directamente.";
+
+      nameInput.required = isRegister;
+      confirmPasswordInput.required = isRegister;
+      confirmPasswordInput.value = "";
+
+      switchModeLink.textContent = isRegister
+        ? "Cambiar a iniciar sesión"
+        : "Cambiar a crear cuenta";
+
+      clearMessages();
+      authForm.reset();
+
+      nameField.style.display = isRegister ? "flex" : "none";
+      confirmPasswordField.style.display = isRegister ? "flex" : "none";
+    }
+
+    function redirectAfterLogin(user) {
+      if (!user.plan) {
+        window.location.href = "planes.html";
+      } else if (isAdmin(user)) {
+        window.location.href = "admin.html";
+      } else {
+        window.location.href = "dashboard.html";
+      }
+    }
+
+    registerTab.addEventListener("click", () => setMode("register"));
+    loginTab.addEventListener("click", () => setMode("login"));
+    switchModeLink.addEventListener("click", () => {
+      setMode(mode === "register" ? "login" : "register");
+    });
+
+    toggleButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        const targetId = button.dataset.target;
+        const input = document.getElementById(targetId);
+        if (!input) return;
+        input.type = input.type === "password" ? "text" : "password";
+        button.textContent = input.type === "password" ? "Ver" : "Ocultar";
+      });
+    });
+
+    authForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearMessages();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      try {
+        let user;
+
+        if (mode === "register") {
+          const name = nameInput.value.trim();
+          const confirmPassword = confirmPasswordInput.value;
+
+          if (password !== confirmPassword) {
+            showMessage("error", "Las contraseñas no coinciden.");
+            return;
+          }
+
+          if (password.length < 6) {
+            showMessage("error", "La contraseña debe tener al menos 6 caracteres.");
+            return;
+          }
+
+          user = await registerUser({ name, email, password });
+          showMessage("success", "Cuenta creada correctamente.");
+        } else {
+          user = await loginUser(email, password);
+          showMessage("success", "Sesión iniciada correctamente.");
+        }
+
+        setTimeout(() => redirectAfterLogin(user), 500);
+      } catch (err) {
+        showMessage("error", err.message || "Ocurrió un error.");
+      }
+    });
+
+    setMode("register");
+  </script>
+</body>
+</html>

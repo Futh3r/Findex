@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Findex | Directorio de PYMES</title>
+  <meta name="description" content="Encuentra negocios locales, descubre categorías y conecta con PYMES cerca de ti." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <span class="brand-name">FINDEX</span>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#inicio">Inicio</a>
+      <a href="#categorias">Categorías</a>
+      <a href="#destacados">Negocios</a>
+      <a href="#planes">Planes</a>
+      <a href="#nosotros">Nosotros</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a class="btn btn-ghost" href="auth.html">Iniciar sesión</a>
+      <a class="btn btn-primary" href="auth.html">Registrar negocio</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <div class="eyebrow">Directorio de PYMES verificadas</div>
+        <h1>Encuentra negocios.<br><span>Impulsa tu mundo.</span></h1>
+        <p>
+          Descubre negocios locales cerca de ti, compara categorías y conecta con emprendedores
+          de forma rápida, limpia y profesional.
+        </p>
+
+        <div class="search-panel">
+          <div class="search-field">
+            <label for="searchInput">Buscar</label>
+            <input id="searchInput" type="text" placeholder="¿Qué estás buscando?" autocomplete="off" />
+          </div>
+
+          <div class="search-field">
+            <label for="locationFilter">Ubicación</label>
+            <select id="locationFilter">
+              <option value="">Cualquiera</option>
+            </select>
+          </div>
+
+          <div class="search-field">
+            <label for="categoryFilter">Categoría</label>
+            <select id="categoryFilter">
+              <option value="">Todas las categorías</option>
+            </select>
+          </div>
+
+          <button class="search-button" id="searchButton" type="button">Buscar</button>
+        </div>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary">Explorar categorías</button>
+          <button class="btn btn-ghost">Ver planes</button>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <img
+          src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80"
+          alt="Negocio local"
+        />
+
+        <div class="stats-card">
+          <div class="stats-head">
+            <span>Negocios activos</span>
+            <strong id="activeCount">0</strong>
+          </div>
+
+          <div class="mini-chart" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+
+          <div class="stats-footer">
+            <span>+18.6% este mes</span>
+            <small>Crecimiento constante</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="categorias">
+      <div class="section-head">
+        <div>
+          <h2>Explora por categorías</h2>
+          <p>Empieza por el tipo de negocio que quieres descubrir.</p>
+        </div>
+        <a href="#destacados" class="section-link">Ver negocios destacados →</a>
+      </div>
+
+      <div class="category-grid" id="categoryGrid"></div>
+    </section>
+
+    <section class="content-section" id="destacados">
+      <div class="section-head">
+        <div>
+          <h2>Negocios destacados</h2>
+          <p>Resultados seleccionados para mostrar la mejor calidad visual.</p>
+        </div>
+        <span class="pill">Verificados</span>
+      </div>
+
+      <div class="business-grid" id="businessGrid"></div>
+    </section>
+
+    <section class="cta-section" id="planes">
+      <div class="cta-copy">
+        <span class="eyebrow">¿Tienes un negocio?</span>
+        <h2>Haz crecer tu negocio con Findex</h2>
+        <p>
+          Consigue más visibilidad, más clientes y una presencia digital que se vea seria desde el primer segundo.
+        </p>
+
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="auth.html">Registrar mi negocio</a>
+          <button class="btn btn-ghost">Ver planes y precios</button>
+        </div>
+      </div>
+
+      <div class="benefits">
+        <div class="benefit-card">
+          <div class="benefit-icon">↗</div>
+          <h3>Más visibilidad</h3>
+          <p>Aparece frente a personas que realmente buscan lo que ofreces.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">◎</div>
+          <h3>Más clientes</h3>
+          <p>Conecta con usuarios por categoría, ubicación y necesidad.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">▣</div>
+          <h3>Estadísticas</h3>
+          <p>Mide interés, visitas y desempeño de tu negocio dentro de la plataforma.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">◉</div>
+          <h3>Soporte premium</h3>
+          <p>Recibe acompañamiento para mantener tu perfil siempre optimizado.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="nosotros">
+    <div>
+      <div class="brand footer-brand">
+        <div class="brand-mark">F</div>
+        <span class="brand-name">FINDEX</span>
+      </div>
+      <p>Un directorio moderno de PYMES pensado para crecer con negocios reales.</p>
+    </div>
+
+    <div class="footer-links">
+      <a href="#inicio">Inicio</a>
+      <a href="#categorias">Categorías</a>
+      <a href="#planes">Planes</a>
+      <a href="#nosotros">Nosotros</a>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

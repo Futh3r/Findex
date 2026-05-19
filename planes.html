@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elegir plan | Findex</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .plans-wrap{
+      width:min(1180px, calc(100% - 32px));
+      margin:0 auto;
+      padding:38px 0 48px;
+    }
+
+    .plans-head{
+      margin-bottom:20px;
+    }
+
+    .plans-head h1{
+      font-size:clamp(2rem, 4vw, 3rem);
+      margin-bottom:10px;
+    }
+
+    .plans-head p{
+      color:#94a3b8;
+      line-height:1.8;
+      max-width:58ch;
+    }
+
+    .plans-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:18px;
+      margin-top:24px;
+    }
+
+    .plan-card{
+      border-radius:28px;
+      border:1px solid rgba(148,163,184,0.16);
+      background:rgba(15,23,42,0.88);
+      padding:24px;
+      box-shadow:0 24px 80px rgba(0,0,0,0.28);
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .plan-card.featured{
+      border-color:rgba(46,229,157,0.34);
+      box-shadow:0 24px 80px rgba(46,229,157,0.08);
+      transform:translateY(-4px);
+    }
+
+    .plan-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+    }
+
+    .plan-top h2{
+      font-size:1.4rem;
+      margin-bottom:6px;
+    }
+
+    .plan-price{
+      color:#2ee59d;
+      font-weight:800;
+    }
+
+    .plan-desc{
+      color:#94a3b8;
+      line-height:1.7;
+    }
+
+    .plan-list{
+      display:grid;
+      gap:10px;
+      color:#cbd5e1;
+    }
+
+    .plan-list span{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.05);
+    }
+
+    @media (max-width: 900px){
+      .plans-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <span class="brand-name">FINDEX</span>
+    </div>
+    <div class="nav-actions">
+      <a class="btn btn-ghost" href="index.html">Inicio</a>
+    </div>
+  </header>
+
+  <main class="plans-wrap">
+    <section class="plans-head">
+      <div class="eyebrow">Elige tu plan</div>
+      <h1>Selecciona el nivel que mejor se adapta a tu negocio</h1>
+      <p>
+        Cada cuenta necesita elegir un plan antes de empezar a publicar. Puedes cambiarlo más adelante desde tu panel.
+      </p>
+    </section>
+
+    <div class="plans-grid" id="plansGrid"></div>
+  </main>
+
+  <script src="data.js"></script>
+  <script>
+    const user = getCurrentUser();
+    if (!user) window.location.href = "auth.html";
+
+    const plansGrid = document.getElementById("plansGrid");
+
+    plansGrid.innerHTML = planDefinitions.map(plan => `
+      <article class="plan-card ${plan.key === "premium" ? "featured" : ""}">
+        <div class="plan-top">
+          <div>
+            <h2>${plan.label}</h2>
+            <div class="plan-price">${plan.price}</div>
+          </div>
+          ${plan.key === "premium" ? '<span class="pill">Más recomendado</span>' : ''}
+        </div>
+
+        <p class="plan-desc">${plan.description}</p>
+
+        <div class="plan-list">
+          <span>✔ ${plan.maxBusinesses === 10 ? "Hasta 10 negocios" : `Hasta ${plan.maxBusinesses} negocios`}</span>
+          <span>✔ ${plan.extraFields ? "Más personalización" : "Lo esencial para empezar"}</span>
+          <span>✔ ${plan.featured ? "Aparece en destacados" : "Sin destacados automáticos"}</span>
+        </div>
+
+        <button class="btn btn-primary" type="button" onclick="choosePlan('${plan.key}')">
+          Elegir ${plan.label}
+        </button>
+      </article>
+    `).join("");
+
+    function choosePlan(planKey) {
+      setUserPlan(planKey);
+
+      const current = getCurrentUser();
+      if (isAdmin(current)) {
+        window.location.href = "admin.html";
+      } else {
+        window.location.href = "dashboard.html";
+      }
+    }
+  </script>
+</body>
+</html>

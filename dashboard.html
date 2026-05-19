@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi panel | Findex</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .dash-wrap{
+      width:min(1200px, calc(100% - 32px));
+      margin:0 auto;
+      padding:34px 0 48px;
+    }
+
+    .dash-head{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+      margin-bottom:22px;
+      align-items:flex-start;
+    }
+
+    .dash-head h1{
+      font-size:clamp(2rem, 4vw, 3rem);
+      margin-bottom:8px;
+    }
+
+    .dash-head p{
+      color:#94a3b8;
+      line-height:1.7;
+    }
+
+    .dashboard-grid{
+      display:grid;
+      grid-template-columns:0.9fr 1.1fr;
+      gap:22px;
+      align-items:start;
+    }
+
+    .panel{
+      background:rgba(15,23,42,0.9);
+      border:1px solid rgba(148,163,184,0.16);
+      border-radius:28px;
+      padding:24px;
+      box-shadow:0 24px 80px rgba(0,0,0,0.28);
+    }
+
+    .panel h2{
+      margin-bottom:14px;
+    }
+
+    .summary{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .summary-card{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+    }
+
+    .summary-card strong{
+      display:block;
+      font-size:1.2rem;
+      margin-bottom:4px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    .field label{
+      color:#cbd5e1;
+      font-weight:600;
+      font-size:0.92rem;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,0.16);
+      background:rgba(255,255,255,0.03);
+      color:#e5eefc;
+      padding:14px 16px;
+      outline:none;
+    }
+
+    .field textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    .my-businesses{
+      display:grid;
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .mine-card{
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+
+    .mine-card h3{
+      margin-bottom:6px;
+    }
+
+    .mine-meta{
+      color:#94a3b8;
+      font-size:0.92rem;
+      line-height:1.6;
+    }
+
+    .mine-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .badge-plan{
+      display:inline-flex;
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(46,229,157,0.12);
+      color:#2ee59d;
+      border:1px solid rgba(46,229,157,0.16);
+      font-weight:700;
+      font-size:0.9rem;
+    }
+
+    .notice{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(46,229,157,0.1);
+      color:#2ee59d;
+      border:1px solid rgba(46,229,157,0.14);
+      display:none;
+    }
+
+    .error{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(239,68,68,0.12);
+      color:#fecaca;
+      border:1px solid rgba(239,68,68,0.18);
+      display:none;
+    }
+
+    .subtle{
+      color:#94a3b8;
+      line-height:1.7;
+    }
+
+    @media (max-width: 980px){
+      .dashboard-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 700px){
+      .form-grid{
+        grid-template-columns:1fr;
+      }
+
+      .summary{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <span class="brand-name">FINDEX</span>
+    </div>
+
+    <nav class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="registrar.html">Agregar negocio</a>
+      <a href="planes.html">Planes</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="btn btn-ghost" id="logoutBtn" type="button">Cerrar sesión</button>
+      <a class="btn btn-primary" href="registrar.html">Nuevo negocio</a>
+    </div>
+  </header>
+
+  <main class="dash-wrap">
+    <section class="dash-head">
+      <div>
+        <div class="eyebrow">Panel del negocio</div>
+        <h1 id="welcomeTitle">Bienvenido</h1>
+        <p id="welcomeText">Administra tu cuenta, plan y negocios desde un solo lugar.</p>
+      </div>
+      <div id="planBadge" class="badge-plan"></div>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel">
+        <h2>Agregar negocio</h2>
+        <p class="subtle" id="planExplanation"></p>
+
+        <form id="businessForm" class="form-grid">
+          <div class="field">
+            <label for="nombre">Nombre del negocio</label>
+            <input id="nombre" type="text" required />
+          </div>
+
+          <div class="field">
+            <label for="categoria">Categoría</label>
+            <select id="categoria" required></select>
+          </div>
+
+          <div class="field">
+            <label for="ubicacion">Ubicación</label>
+            <input id="ubicacion" type="text" required />
+          </div>
+
+          <div class="field">
+            <label for="telefono">Teléfono / WhatsApp</label>
+            <input id="telefono" type="text" required />
+          </div>
+
+          <div class="field">
+            <label for="horario">Horario</label>
+            <input id="horario" type="text" required />
+          </div>
+
+          <div class="field">
+            <label for="imagen">URL de imagen</label>
+            <input id="imagen" type="url" required />
+          </div>
+
+          <div class="field full">
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" required></textarea>
+          </div>
+
+          <div class="field full advanced-only">
+            <label for="sitio">Sitio web</label>
+            <input id="sitio" type="url" placeholder="https://..." />
+          </div>
+
+          <div class="field full advanced-only">
+            <label for="instagram">Instagram</label>
+            <input id="instagram" type="text" placeholder="@tu_negocio" />
+          </div>
+
+          <div class="field full">
+            <label for="bannerColor">Color de marca</label>
+            <input id="bannerColor" type="text" placeholder="#2ee59d" />
+          </div>
+
+          <div class="field full">
+            <button class="btn btn-primary" id="saveBtn" type="submit">Guardar negocio</button>
+          </div>
+        </form>
+
+        <div id="limitNotice" class="notice"></div>
+        <div id="formError" class="error"></div>
+      </article>
+
+      <article class="panel">
+        <h2>Mis negocios</h2>
+        <p class="subtle">Puedes editar o eliminar solo los negocios de tu cuenta.</p>
+
+        <div class="summary">
+          <div class="summary-card">
+            <strong id="totalMine">0</strong>
+            <span>Negocios tuyos</span>
+          </div>
+          <div class="summary-card">
+            <strong id="featuredMine">0</strong>
+            <span>Destacados</span>
+          </div>
+          <div class="summary-card">
+            <strong id="planLimit">0</strong>
+            <span>Límite del plan</span>
+          </div>
+        </div>
+
+        <div class="my-businesses" id="myBusinesses"></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script>
+    const user = getCurrentUser();
+    if (!user) window.location.href = "auth.html";
+    if (!user.plan) window.location.href = "planes.html";
+    if (isAdmin(user)) window.location.href = "admin.html";
+
+    const welcomeTitle = document.getElementById("welcomeTitle");
+    const welcomeText = document.getElementById("welcomeText");
+    const planBadge = document.getElementById("planBadge");
+    const planExplanation = document.getElementById("planExplanation");
+    const businessForm = document.getElementById("businessForm");
+    const myBusinesses = document.getElementById("myBusinesses");
+    const totalMine = document.getElementById("totalMine");
+    const featuredMine = document.getElementById("featuredMine");
+    const planLimit = document.getElementById("planLimit");
+    const limitNotice = document.getElementById("limitNotice");
+    const formError = document.getElementById("formError");
+    const saveBtn = document.getElementById("saveBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const categoriaSelect = document.getElementById("categoria");
+    const advancedFields = document.querySelectorAll(".advanced-only");
+
+    let editingId = null;
+
+    categories.forEach(cat => {
+      const option = document.createElement("option");
+      option.value = cat.key;
+      option.textContent = cat.label;
+      categoriaSelect.appendChild(option);
+    });
+
+    const plan = planDefinitions.find(p => p.key === user.plan);
+    welcomeTitle.textContent = `Hola, ${user.name}`;
+    welcomeText.textContent = `Este es tu panel personal. Aquí administras tu plan ${plan?.label || ""} y tus negocios.`;
+    planBadge.textContent = `Plan ${plan?.label || "sin plan"}`;
+    planExplanation.textContent = `${plan?.description || ""} ${plan?.extraFields ? "Tu plan permite más personalización." : "Tu plan está enfocado en lo esencial."}`;
+
+    if (plan?.extraFields) {
+      advancedFields.forEach(el => el.style.display = "flex");
+    } else {
+      advancedFields.forEach(el => el.style.display = "none");
+    }
+
+    planLimit.textContent = plan?.maxBusinesses === 10 ? "10" : String(plan?.maxBusinesses || 1);
+
+    function showError(msg) {
+      formError.textContent = msg;
+      formError.style.display = "block";
+      limitNotice.style.display = "none";
+    }
+
+    function showNotice(msg) {
+      limitNotice.textContent = msg;
+      limitNotice.style.display = "block";
+      formError.style.display = "none";
+    }
+
+    function clearMessages() {
+      limitNotice.style.display = "none";
+      formError.style.display = "none";
+    }
+
+    function renderMyBusinesses() {
+      const list = getOwnerBusinesses(user.email);
+      totalMine.textContent = list.length;
+      featuredMine.textContent = list.filter(b => b.destacado).length;
+
+      const limit = plan?.maxBusinesses || 1;
+      if (list.length >= limit) {
+        saveBtn.disabled = true;
+        showNotice(`Has alcanzado el límite de tu plan (${limit} negocio(s)). Puedes actualizar tu plan para agregar más.`);
+      } else {
+        saveBtn.disabled = false;
+        clearMessages();
+      }
+
+      if (!list.length) {
+        myBusinesses.innerHTML = `
+          <div class="empty-state">
+            Todavía no has agregado ningún negocio. Completa el formulario para publicar el primero.
+          </div>
+        `;
+        return;
+      }
+
+      myBusinesses.innerHTML = list.map(b => `
+        <div class="mine-card">
+          <div>
+            <h3>${b.nombre}</h3>
+            <div class="mine-meta">
+              ${b.categoriaLabel} · ${b.ubicacion}<br/>
+              ${b.verificado ? "✔ Verificado" : "◌ Pendiente de verificación"}<br/>
+              ${b.destacado ? "⭐ Destacado" : "Normal"}
+            </div>
+          </div>
+
+          <div class="mine-actions">
+            <a class="btn btn-ghost" href="negocio.html?id=${b.id}">Ver</a>
+            <button class="btn btn-ghost" type="button" onclick="editBusiness(${b.id})">Editar</button>
+            <button class="btn btn-primary" type="button" onclick="removeBusiness(${b.id})">Eliminar</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    window.editBusiness = function(id) {
+      const business = getBusinesses().find(b => b.id === id && b.ownerEmail === user.email);
+      if (!business) return;
+
+      editingId = id;
+      document.getElementById("nombre").value = business.nombre;
+      document.getElementById("categoria").value = business.categoria;
+      document.getElementById("ubicacion").value = business.ubicacion;
+      document.getElementById("telefono").value = business.telefono;
+      document.getElementById("horario").value = business.horario;
+      document.getElementById("imagen").value = business.imagen;
+      document.getElementById("descripcion").value = business.descripcion;
+      document.getElementById("sitio").value = business.sitio || "";
+      document.getElementById("instagram").value = business.instagram || "";
+      document.getElementById("bannerColor").value = business.bannerColor || "#2ee59d";
+      saveBtn.textContent = "Actualizar negocio";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    window.removeBusiness = function(id) {
+      const business = getBusinesses().find(b => b.id === id && b.ownerEmail === user.email);
+      if (!business) return;
+      deleteBusiness(id);
+      if (editingId === id) editingId = null;
+      saveBtn.textContent = "Guardar negocio";
+      businessForm.reset();
+      renderMyBusinesses();
+    };
+
+    businessForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      clearMessages();
+
+      const list = getOwnerBusinesses(user.email);
+      const limit = plan?.maxBusinesses || 1;
+
+      if (!editingId && list.length >= limit) {
+        showError(`Tu plan ${plan?.label || ""} solo permite ${limit} negocio(s).`);
+        return;
+      }
+
+      const payload = {
+        nombre: document.getElementById("nombre").value.trim(),
+        categoria: document.getElementById("categoria").value,
+        ubicacion: document.getElementById("ubicacion").value.trim(),
+        telefono: document.getElementById("telefono").value.trim(),
+        whatsapp: document.getElementById("telefono").value.trim(),
+        horario: document.getElementById("horario").value.trim(),
+        imagen: document.getElementById("imagen").value.trim(),
+        descripcion: document.getElementById("descripcion").value.trim(),
+        sitio: document.getElementById("sitio").value.trim(),
+        instagram: document.getElementById("instagram").value.trim(),
+        bannerColor: document.getElementById("bannerColor").value.trim() || "#2ee59d"
+      };
+
+      if (editingId) {
+        updateBusiness(editingId, payload);
+        editingId = null;
+        saveBtn.textContent = "Guardar negocio";
+      } else {
+        addBusiness(payload);
+      }
+
+      businessForm.reset();
+      renderMyBusinesses();
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      clearSession();
+      window.location.href = "index.html";
+    });
+
+    renderMyBusinesses();
+  </script>
+</body>
+</html>
