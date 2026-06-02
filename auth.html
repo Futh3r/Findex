@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Acceso | Findex</title>
-  <meta name="description" content="Crea tu cuenta o inicia sesión para administrar tu negocio en Findex." />
+  <meta name="description" content="Crea una cuenta de cliente o empresa e inicia sesión en Findex." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -25,30 +25,28 @@
     .auth-card{
       border-radius:28px;
       border:1px solid rgba(148,163,184,0.16);
-      background:rgba(15,23,42,0.88);
+      background:rgba(15,23,42,0.9);
       box-shadow:0 24px 80px rgba(0,0,0,0.32);
       overflow:hidden;
     }
 
     .auth-hero{
-      position:relative;
       padding:34px;
       display:flex;
       flex-direction:column;
       justify-content:space-between;
       gap:26px;
       background:
-        radial-gradient(circle at top right, rgba(46,229,157,0.14), transparent 24%),
-        radial-gradient(circle at bottom left, rgba(56,189,248,0.08), transparent 20%),
-        rgba(15,23,42,0.88);
+        linear-gradient(180deg, rgba(15,23,42,0.9), rgba(8,13,27,0.98)),
+        linear-gradient(135deg, rgba(46,229,157,0.11), transparent 42%);
     }
 
     .auth-hero h1{
       font-size:clamp(2.2rem, 4.4vw, 4rem);
-      line-height:0.98;
-      letter-spacing:-0.04em;
+      line-height:1;
+      letter-spacing:0;
       margin-bottom:14px;
-      max-width:12ch;
+      max-width:13ch;
     }
 
     .auth-hero h1 span{
@@ -58,7 +56,7 @@
     .auth-hero p{
       color:#94a3b8;
       line-height:1.8;
-      max-width:44ch;
+      max-width:46ch;
       font-size:1rem;
     }
 
@@ -74,7 +72,7 @@
       border:1px solid rgba(46,229,157,0.18);
       background:rgba(46,229,157,0.08);
       color:#2ee59d;
-      font-weight:700;
+      font-weight:800;
       font-size:0.9rem;
     }
 
@@ -100,10 +98,10 @@
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:10px;
-      margin-bottom:22px;
+      margin-bottom:18px;
       padding:6px;
       border-radius:18px;
-      background:rgba(255,255,255,0.03);
+      background:rgba(255,255,255,0.035);
       border:1px solid rgba(255,255,255,0.06);
     }
 
@@ -114,7 +112,7 @@
       cursor:pointer;
       background:transparent;
       color:#cbd5e1;
-      font-weight:700;
+      font-weight:800;
       transition:0.2s ease;
     }
 
@@ -122,6 +120,40 @@
       background:linear-gradient(135deg, #2ee59d, #6af0ba);
       color:#02110b;
       box-shadow:0 12px 24px rgba(46,229,157,0.16);
+    }
+
+    .account-type-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin:0 0 18px;
+    }
+
+    .account-option{
+      text-align:left;
+      border-radius:18px;
+      padding:15px;
+      border:1px solid rgba(148,163,184,0.16);
+      background:rgba(255,255,255,0.03);
+      color:#e5eefc;
+      cursor:pointer;
+      transition:0.2s ease;
+    }
+
+    .account-option.active{
+      border-color:rgba(46,229,157,0.44);
+      background:rgba(46,229,157,0.1);
+    }
+
+    .account-option strong{
+      display:block;
+      margin-bottom:6px;
+    }
+
+    .account-option span{
+      color:#94a3b8;
+      line-height:1.5;
+      font-size:0.9rem;
     }
 
     .field{
@@ -135,7 +167,7 @@
     .field label{
       color:#cbd5e1;
       font-size:0.92rem;
-      font-weight:600;
+      font-weight:700;
     }
 
     .field input{
@@ -220,7 +252,7 @@
 
     .mini-link{
       color:#2ee59d;
-      font-weight:700;
+      font-weight:800;
       cursor:pointer;
     }
 
@@ -229,22 +261,29 @@
         grid-template-columns:1fr;
       }
     }
+
+    @media (max-width: 620px){
+      .account-type-grid{
+        grid-template-columns:1fr;
+      }
+    }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
+    <a class="brand" href="index.html" aria-label="Findex">
       <div class="brand-mark">F</div>
       <span class="brand-name">FINDEX</span>
-    </div>
+    </a>
 
     <nav class="nav-links">
       <a href="index.html">Inicio</a>
-      <a href="index.html#categorias">Categorías</a>
-      <a href="index.html#planes">Planes</a>
+      <a href="index.html#explorar">Explorar</a>
+      <a href="index.html#empresas">Empresas</a>
+      <a href="planes.html">Planes</a>
     </nav>
 
-    <div class="nav-actions" id="navActions"></div>
+    <div class="nav-actions">
       <a class="btn btn-ghost" href="index.html">Volver</a>
     </div>
   </header>
@@ -253,30 +292,41 @@
     <section class="auth-hero">
       <div>
         <div class="eyebrow">Acceso seguro</div>
-        <h1>Crea tu cuenta y gestiona <span>tu negocio</span>.</h1>
+        <h1>Entra a Findex según <span>tu objetivo.</span></h1>
         <p>
-          Regístrate, inicia sesión y elige el plan adecuado para publicar tu negocio
-          con una presencia seria, moderna y lista para crecer.
+          Los clientes pueden explorar negocios de inmediato. Las empresas pueden crear su cuenta,
+          elegir un plan y administrar su presencia visual dentro del directorio.
         </p>
       </div>
 
       <div class="auth-badges">
-        <span>Registro</span>
-        <span>Inicio de sesión</span>
+        <span>Clientes</span>
+        <span>Empresas</span>
         <span>Planes</span>
-        <span>Panel personal</span>
+        <span>Panel privado</span>
       </div>
     </section>
 
     <section class="auth-card">
       <div class="auth-card-top">
         <h2 id="formTitle">Crear cuenta</h2>
-        <p id="formSubtitle">Empieza con una cuenta y luego elige tu plan.</p>
+        <p id="formSubtitle">Crea una cuenta de cliente para explorar negocios y guardar tu sesión.</p>
       </div>
 
       <div class="tabs">
         <button class="tab-btn active" id="registerTab" type="button">Crear cuenta</button>
         <button class="tab-btn" id="loginTab" type="button">Iniciar sesión</button>
+      </div>
+
+      <div class="account-type-grid" id="accountTypeGrid" aria-label="Tipo de cuenta">
+        <button class="account-option active" id="clientOption" type="button" data-type="client">
+          <strong>Cliente</strong>
+          <span>Explora negocios, entra a perfiles y contacta rápido.</span>
+        </button>
+        <button class="account-option" id="businessOption" type="button" data-type="business">
+          <strong>Empresa</strong>
+          <span>Publica negocios, elige plan y administra tu vitrina.</span>
+        </button>
       </div>
 
       <form id="authForm" autocomplete="on">
@@ -307,16 +357,16 @@
         </div>
 
         <div class="mini-row">
-          <span id="passwordHint">Usa una contraseña segura.</span>
+          <span id="passwordHint">Usa al menos 6 caracteres.</span>
           <span class="mini-link" id="switchModeLink">Cambiar a iniciar sesión</span>
         </div>
 
         <div class="auth-actions">
-          <button class="btn btn-primary" id="submitBtn" type="submit">Crear cuenta</button>
+          <button class="btn btn-primary" id="submitBtn" type="submit">Crear cuenta de cliente</button>
         </div>
 
         <div class="auth-note" id="authNote">
-          Si el correo ya existe, el sistema te dirá que esa cuenta ya está registrada.
+          Las cuentas de cliente entran directo al explorador. Las empresas continúan a planes.
         </div>
 
         <div id="authError" class="auth-error"></div>
@@ -327,10 +377,27 @@
 
   <script src="data.js"></script>
   <script>
-    // Corrección 3: Verificar sesión al cargar
+    const params = new URLSearchParams(window.location.search);
+    const requestedType = params.get("tipo") === "empresa" ? ACCOUNT_TYPES.business : ACCOUNT_TYPES.client;
+
+    function redirectAfterLogin(user) {
+      if (isAdmin(user)) {
+        window.location.href = "admin.html";
+        return;
+      }
+
+      if (isBusinessUser(user)) {
+        window.location.href = user.plan ? "dashboard.html" : "planes.html";
+        return;
+      }
+
+      window.location.href = "index.html#explorar";
+    }
+
     const existingUser = getCurrentUser();
     if (existingUser) {
-      window.location.href = isAdmin(existingUser) ? "admin.html" : "dashboard.html";
+      document.body.hidden = true;
+      redirectAfterLogin(existingUser);
     }
 
     const registerTab = document.getElementById("registerTab");
@@ -346,15 +413,17 @@
     const switchModeLink = document.getElementById("switchModeLink");
     const passwordHint = document.getElementById("passwordHint");
     const authNote = document.getElementById("authNote");
+    const accountTypeGrid = document.getElementById("accountTypeGrid");
+    const accountOptions = document.querySelectorAll(".account-option");
 
     const nameInput = document.getElementById("name");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
     const confirmPasswordInput = document.getElementById("confirmPassword");
-
     const toggleButtons = document.querySelectorAll(".toggle-pass");
 
     let mode = "register";
+    let selectedAccountType = requestedType;
 
     function showMessage(type, text) {
       authError.style.display = "none";
@@ -370,6 +439,25 @@
       authSuccess.style.display = "none";
     }
 
+    function setAccountType(type) {
+      selectedAccountType = type === ACCOUNT_TYPES.business ? ACCOUNT_TYPES.business : ACCOUNT_TYPES.client;
+
+      accountOptions.forEach(option => {
+        option.classList.toggle("active", option.dataset.type === selectedAccountType);
+      });
+
+      if (mode !== "register") return;
+
+      const isBusiness = selectedAccountType === ACCOUNT_TYPES.business;
+      formSubtitle.textContent = isBusiness
+        ? "Crea una cuenta de empresa para elegir plan y publicar negocios."
+        : "Crea una cuenta de cliente para explorar negocios y guardar tu sesión.";
+      submitBtn.textContent = isBusiness ? "Crear cuenta de empresa" : "Crear cuenta de cliente";
+      authNote.textContent = isBusiness
+        ? "Después del registro elegirás un plan antes de publicar tu primer negocio."
+        : "Las cuentas de cliente entran directo al explorador de negocios.";
+    }
+
     function setMode(newMode) {
       mode = newMode;
       const isRegister = mode === "register";
@@ -377,22 +465,18 @@
       registerTab.classList.toggle("active", isRegister);
       loginTab.classList.toggle("active", !isRegister);
 
+      accountTypeGrid.style.display = isRegister ? "grid" : "none";
       nameField.style.display = isRegister ? "flex" : "none";
       confirmPasswordField.style.display = isRegister ? "flex" : "none";
-      submitBtn.textContent = isRegister ? "Crear cuenta" : "Iniciar sesión";
       formTitle.textContent = isRegister ? "Crear cuenta" : "Iniciar sesión";
-      formSubtitle.textContent = isRegister
-        ? "Empieza con una cuenta y luego elige tu plan."
-        : "Entra a tu panel y administra tu negocio.";
 
-      // Corrección 4: Texto del hint actualizado
       passwordHint.textContent = isRegister
-        ? "Usa una contraseña segura."
+        ? "Usa al menos 6 caracteres."
         : "Escribe la contraseña de tu cuenta.";
 
       authNote.textContent = isRegister
-        ? "Si el correo ya existe, el sistema te dirá que esa cuenta ya está registrada."
-        : "Si la contraseña está mal, el sistema te lo avisará directamente.";
+        ? "Las cuentas de cliente entran directo al explorador. Las empresas continúan a planes."
+        : "El sistema abrirá la vista correcta según tu tipo de cuenta.";
 
       nameInput.required = isRegister;
       confirmPasswordInput.required = isRegister;
@@ -402,18 +486,15 @@
         ? "Cambiar a iniciar sesión"
         : "Cambiar a crear cuenta";
 
+      if (!isRegister) {
+        formSubtitle.textContent = "Entra con tu correo y contraseña para continuar.";
+        submitBtn.textContent = "Iniciar sesión";
+      } else {
+        setAccountType(selectedAccountType);
+      }
+
       clearMessages();
       authForm.reset();
-    }
-
-    function redirectAfterLogin(user) {
-      if (!user.plan) {
-        window.location.href = "planes.html";
-      } else if (isAdmin(user)) {
-        window.location.href = "admin.html";
-      } else {
-        window.location.href = "dashboard.html";
-      }
     }
 
     registerTab.addEventListener("click", () => setMode("register"));
@@ -422,17 +503,20 @@
       setMode(mode === "register" ? "login" : "register");
     });
 
+    accountOptions.forEach(option => {
+      option.addEventListener("click", () => setAccountType(option.dataset.type));
+    });
+
     toggleButtons.forEach(button => {
       button.addEventListener("click", () => {
-        const targetId = button.dataset.target;
-        const input = document.getElementById(targetId);
+        const input = document.getElementById(button.dataset.target);
         if (!input) return;
         input.type = input.type === "password" ? "text" : "password";
         button.textContent = input.type === "password" ? "Ver" : "Ocultar";
       });
     });
 
-    authForm.addEventListener("submit", async (e) => {
+    authForm.addEventListener("submit", async e => {
       e.preventDefault();
       clearMessages();
 
@@ -456,24 +540,29 @@
             return;
           }
 
-          user = await registerUser({ name, email, password });
-          showMessage("success", "Cuenta creada correctamente.");
+          user = await registerUser({
+            name,
+            email,
+            password,
+            accountType: selectedAccountType
+          });
+
+          showMessage("success", selectedAccountType === ACCOUNT_TYPES.business
+            ? "Cuenta de empresa creada correctamente."
+            : "Cuenta de cliente creada correctamente.");
         } else {
           user = await loginUser(email, password);
           showMessage("success", "Sesión iniciada correctamente.");
         }
 
-        setTimeout(() => redirectAfterLogin(user), 500);
+        setTimeout(() => redirectAfterLogin(user), 450);
       } catch (err) {
         showMessage("error", err.message || "Ocurrió un error.");
       }
     });
 
+    setAccountType(requestedType);
     setMode("register");
   </script>
-  <script>
-  renderSessionNav("navActions");
-</script>
-
 </body>
 </html>

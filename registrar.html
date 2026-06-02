@@ -10,13 +10,13 @@
   <link rel="stylesheet" href="styles.css" />
   <style>
     .form-wrap{
-      width:min(900px, calc(100% - 32px));
+      width:min(980px, calc(100% - 32px));
       margin:0 auto;
       padding:40px 0 48px;
     }
 
     .form-card{
-      background:rgba(15,23,42,0.9);
+      background:rgba(15,23,42,0.92);
       border:1px solid rgba(148,163,184,0.16);
       border-radius:28px;
       padding:28px;
@@ -26,6 +26,7 @@
     .form-card h1{
       font-size:2rem;
       margin-bottom:10px;
+      letter-spacing:0;
     }
 
     .form-card p{
@@ -53,7 +54,7 @@
     .field label{
       font-size:0.9rem;
       color:#cbd5e1;
-      font-weight:600;
+      font-weight:700;
     }
 
     .field input,
@@ -80,6 +81,17 @@
       margin-top:22px;
     }
 
+    .form-error{
+      display:none;
+      margin-top:18px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(239,68,68,0.12);
+      color:#fecaca;
+      border:1px solid rgba(239,68,68,0.18);
+      line-height:1.6;
+    }
+
     @media (max-width: 700px){
       .form-grid{
         grid-template-columns:1fr;
@@ -89,26 +101,25 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
+    <a class="brand" href="index.html" aria-label="Findex">
       <div class="brand-mark">F</div>
       <span class="brand-name">FINDEX</span>
-    </div>
+    </a>
 
     <nav class="nav-links">
       <a href="index.html">Inicio</a>
-      <a href="index.html#categorias">Categorías</a>
-      <a href="index.html#planes">Planes</a>
+      <a href="dashboard.html">Mi panel</a>
+      <a href="planes.html">Planes</a>
     </nav>
 
     <div class="nav-actions" id="navActions"></div>
-      <button class="btn btn-ghost" onclick="history.back()">Volver</button>
-    </div>
   </header>
 
   <main class="form-wrap">
     <section class="form-card">
+      <div class="eyebrow">Nuevo perfil</div>
       <h1>Registrar negocio</h1>
-      <p>Agrega un negocio a la plataforma. Al guardar, aparecerá en el directorio principal.</p>
+      <p>Completa la información esencial y publica una vitrina visual lista para clientes.</p>
 
       <form id="businessForm" class="form-grid">
         <div class="field">
@@ -139,8 +150,8 @@
         </div>
 
         <div class="field">
-          <label for="imagen">URL de imagen</label>
-          <input id="imagen" required type="url" placeholder="https://..." />
+          <label for="sitio">Sitio web</label>
+          <input id="sitio" type="url" placeholder="https://..." />
         </div>
 
         <div class="field full">
@@ -149,24 +160,78 @@
         </div>
 
         <div class="field full">
-          <label for="sitio">Sitio web (opcional)</label>
-          <input id="sitio" type="url" placeholder="https://..." />
+          <label>Fotos del negocio</label>
+          <div class="image-manager">
+            <div class="image-upload-grid">
+              <div class="upload-zone" id="mainDrop">
+                <strong>Foto principal</strong>
+                <small>Será la imagen principal del perfil y del listado.</small>
+                <input class="sr-only" id="mainImageInput" type="file" accept="image/*" />
+                <label class="btn btn-ghost" for="mainImageInput">Subir imagen</label>
+              </div>
+              <div id="mainPreview"></div>
+            </div>
+
+            <div class="image-upload-grid">
+              <div class="upload-zone" id="galleryDrop">
+                <strong>Fotos adicionales</strong>
+                <small>Hasta 6 imágenes para mostrar el ambiente, productos o detalles.</small>
+                <input class="sr-only" id="galleryImageInput" type="file" accept="image/*" multiple />
+                <label class="btn btn-ghost" for="galleryImageInput">Subir galería</label>
+              </div>
+              <div class="preview-grid" id="galleryPreview"></div>
+            </div>
+          </div>
         </div>
 
         <div class="field full">
           <div class="form-actions">
             <button class="btn btn-primary" type="submit">Guardar negocio</button>
-            <a class="btn btn-ghost" href="index.html">Cancelar</a>
+            <a class="btn btn-ghost" href="dashboard.html">Cancelar</a>
           </div>
         </div>
       </form>
+
+      <div id="formError" class="form-error"></div>
     </section>
   </main>
 
   <script src="data.js"></script>
+  <script src="media-manager.js"></script>
   <script>
+    const currentUser = getCurrentUser();
+    let redirectTarget = "";
+    if (!currentUser) redirectTarget = "auth.html?tipo=empresa";
+    else if (!isBusinessUser(currentUser)) redirectTarget = "index.html#explorar";
+    else if (!currentUser.plan) redirectTarget = "planes.html";
+
+    if (redirectTarget) {
+      document.body.hidden = true;
+      window.location.href = redirectTarget;
+    }
+
     const categorySelect = document.getElementById("categoria");
     const form = document.getElementById("businessForm");
+    const formError = document.getElementById("formError");
+
+    function showError(message) {
+      formError.textContent = message;
+      formError.style.display = "block";
+    }
+
+    function clearError() {
+      formError.style.display = "none";
+    }
+
+    const photoManager = createPhotoManager({
+      mainInputId: "mainImageInput",
+      galleryInputId: "galleryImageInput",
+      mainDropId: "mainDrop",
+      galleryDropId: "galleryDrop",
+      mainPreviewId: "mainPreview",
+      galleryPreviewId: "galleryPreview",
+      onError: showError
+    });
 
     categories.forEach(cat => {
       const option = document.createElement("option");
@@ -175,27 +240,38 @@
       categorySelect.appendChild(option);
     });
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", e => {
       e.preventDefault();
+      clearError();
 
-      const newBusiness = addBusiness({
-        nombre: document.getElementById("nombre").value.trim(),
-        categoria: document.getElementById("categoria").value,
-        categoriaLabel: getCategoryLabel(document.getElementById("categoria").value),
-        ubicacion: document.getElementById("ubicacion").value.trim(),
-        descripcion: document.getElementById("descripcion").value.trim(),
-        imagen: document.getElementById("imagen").value.trim(),
-        horario: document.getElementById("horario").value.trim(),
-        telefono: document.getElementById("telefono").value.trim(),
-        whatsapp: document.getElementById("telefono").value.trim(),
-        sitio: document.getElementById("sitio").value.trim() || "https://example.com"
-      });
+      const media = photoManager.getImages();
+      if (!media.imagen) {
+        showError("Agrega una foto principal del negocio.");
+        return;
+      }
 
-      window.location.href = `negocio.html?id=${newBusiness.id}`;
+      try {
+        const newBusiness = addBusiness({
+          nombre: document.getElementById("nombre").value.trim(),
+          categoria: document.getElementById("categoria").value,
+          ubicacion: document.getElementById("ubicacion").value.trim(),
+          descripcion: document.getElementById("descripcion").value.trim(),
+          imagen: media.imagen,
+          galeria: media.galeria,
+          horario: document.getElementById("horario").value.trim(),
+          telefono: document.getElementById("telefono").value.trim(),
+          whatsapp: document.getElementById("telefono").value.trim(),
+          sitio: document.getElementById("sitio").value.trim()
+        });
+
+        window.location.href = `negocio.html?id=${newBusiness.id}`;
+      } catch (err) {
+        showError(err.message || "No se pudo guardar el negocio.");
+      }
     });
   </script>
   <script>
-  renderSessionNav("navActions");
-</script>
+    renderSessionNav("navActions");
+  </script>
 </body>
 </html>

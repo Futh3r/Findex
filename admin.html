@@ -27,21 +27,40 @@
     .admin-head h1{
       font-size:clamp(2rem, 4vw, 3rem);
       margin-bottom:8px;
+      letter-spacing:0;
     }
 
     .admin-grid{
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:0.9fr 1.1fr;
       gap:22px;
       align-items:start;
+      margin-top:22px;
     }
 
     .panel{
-      background:rgba(15,23,42,0.9);
+      background:rgba(15,23,42,0.92);
       border:1px solid rgba(148,163,184,0.16);
       border-radius:28px;
       padding:24px;
       box-shadow:0 24px 80px rgba(0,0,0,0.28);
+    }
+
+    .admin-toolbar{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .admin-toolbar input{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,0.16);
+      background:rgba(255,255,255,0.03);
+      color:#e5eefc;
+      padding:13px 15px;
+      outline:none;
     }
 
     .admin-list{
@@ -51,10 +70,20 @@
     }
 
     .admin-card{
-      padding:16px;
+      display:grid;
+      grid-template-columns:118px 1fr;
+      gap:14px;
+      padding:14px;
       border-radius:18px;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.06);
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .admin-card img{
+      width:118px;
+      height:118px;
+      object-fit:cover;
+      border-radius:14px;
     }
 
     .admin-card-top{
@@ -73,18 +102,19 @@
       color:#94a3b8;
       line-height:1.6;
       font-size:0.92rem;
+      margin-bottom:12px;
     }
 
     .admin-actions{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      margin-top:12px;
     }
 
     .mini-form{
       display:grid;
       gap:12px;
+      margin-top:16px;
     }
 
     .field{
@@ -95,7 +125,7 @@
 
     .field label{
       color:#cbd5e1;
-      font-weight:600;
+      font-weight:700;
       font-size:0.92rem;
     }
 
@@ -111,8 +141,14 @@
       outline:none;
     }
 
+    .field input[type="color"]{
+      min-height:48px;
+      padding:6px;
+    }
+
     .field textarea{
       min-height:110px;
+      resize:vertical;
     }
 
     .stats{
@@ -125,14 +161,26 @@
     .stat{
       padding:14px;
       border-radius:18px;
-      background:rgba(255,255,255,0.03);
+      background:rgba(255,255,255,0.035);
       border:1px solid rgba(255,255,255,0.06);
     }
 
     .stat strong{
       display:block;
-      font-size:1.2rem;
+      font-size:1.25rem;
       margin-bottom:4px;
+      color:#2ee59d;
+    }
+
+    .badge-plan{
+      display:inline-flex;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(46,229,157,0.12);
+      color:#2ee59d;
+      border:1px solid rgba(46,229,157,0.16);
+      font-weight:800;
+      font-size:0.9rem;
     }
 
     @media (max-width: 1000px){
@@ -145,26 +193,33 @@
       .stats{
         grid-template-columns:1fr 1fr;
       }
+
+      .admin-toolbar,
+      .admin-card{
+        grid-template-columns:1fr;
+      }
+
+      .admin-card img{
+        width:100%;
+        height:190px;
+      }
     }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
+    <a class="brand" href="index.html" aria-label="Findex">
       <div class="brand-mark">F</div>
       <span class="brand-name">FINDEX</span>
-    </div>
+    </a>
 
     <nav class="nav-links">
       <a href="index.html">Inicio</a>
-      <a href="dashboard.html">Panel usuario</a>
+      <a href="dashboard.html">Panel empresa</a>
       <a href="planes.html">Planes</a>
     </nav>
 
     <div class="nav-actions" id="navActions"></div>
-      <button class="btn btn-ghost" id="logoutBtn" type="button">Cerrar sesión</button>
-      <a class="btn btn-primary" href="dashboard.html">Panel personal</a>
-    </div>
   </header>
 
   <main class="admin-wrap">
@@ -172,7 +227,7 @@
       <div>
         <div class="eyebrow">Panel de administración</div>
         <h1 id="adminTitle">Administrar negocios</h1>
-        <p class="subtle">Aquí puedes verificar, destacar, editar y eliminar cualquier negocio.</p>
+        <p class="subtle">Controla verificación, destacados, datos públicos y galería visual de cada perfil.</p>
       </div>
       <div class="badge-plan">Acceso administrador</div>
     </section>
@@ -184,12 +239,12 @@
       <div class="stat"><strong id="statFeatured">0</strong><span>Destacados</span></div>
     </section>
 
-    <div class="admin-grid" style="margin-top:22px;">
+    <div class="admin-grid">
       <article class="panel">
-        <h2>Editar negocio</h2>
-        <p class="subtle">Selecciona un negocio de la lista para editarlo.</p>
+        <h2 id="editTitle">Editar negocio</h2>
+        <p class="subtle">Selecciona un negocio de la lista para modificar su información pública.</p>
 
-        <form id="adminForm" class="mini-form" style="margin-top:16px;">
+        <form id="adminForm" class="mini-form">
           <input type="hidden" id="businessId" />
 
           <div class="field">
@@ -218,8 +273,8 @@
           </div>
 
           <div class="field">
-            <label for="imagen">Imagen</label>
-            <input id="imagen" required />
+            <label for="bannerColor">Color de marca</label>
+            <input id="bannerColor" type="color" value="#2ee59d" />
           </div>
 
           <div class="field">
@@ -238,8 +293,28 @@
           </div>
 
           <div class="field">
-            <label for="bannerColor">Color de marca</label>
-            <input id="bannerColor" />
+            <label>Fotos del negocio</label>
+            <div class="image-manager">
+              <div class="image-upload-grid">
+                <div class="upload-zone" id="mainDrop">
+                  <strong>Foto principal</strong>
+                  <small>Imagen principal del perfil y del listado.</small>
+                  <input class="sr-only" id="mainImageInput" type="file" accept="image/*" />
+                  <label class="btn btn-ghost" for="mainImageInput">Subir imagen</label>
+                </div>
+                <div id="mainPreview"></div>
+              </div>
+
+              <div class="image-upload-grid">
+                <div class="upload-zone" id="galleryDrop">
+                  <strong>Fotos adicionales</strong>
+                  <small>Galería pública del negocio.</small>
+                  <input class="sr-only" id="galleryImageInput" type="file" accept="image/*" multiple />
+                  <label class="btn btn-ghost" for="galleryImageInput">Subir galería</label>
+                </div>
+                <div class="preview-grid" id="galleryPreview"></div>
+              </div>
+            </div>
           </div>
 
           <div class="field" style="display:flex;gap:10px;flex-direction:row;flex-wrap:wrap;">
@@ -253,7 +328,12 @@
 
       <article class="panel">
         <h2>Todos los negocios</h2>
-        <p class="subtle">Control total sobre la plataforma.</p>
+        <p class="subtle">Busca, revisa y administra el estado de cada perfil.</p>
+
+        <div class="admin-toolbar">
+          <input id="adminSearch" type="search" placeholder="Buscar negocio, dueño, ubicación..." />
+          <a class="btn btn-ghost" href="index.html#explorar">Ver directorio</a>
+        </div>
 
         <div class="admin-list" id="adminList"></div>
       </article>
@@ -261,12 +341,22 @@
   </main>
 
   <script src="data.js"></script>
+  <script src="media-manager.js"></script>
   <script>
-    const user = getCurrentUser();
-    if (!user) window.location.href = "auth.html";
-    if (!isAdmin(user)) window.location.href = "dashboard.html";
+    const sessionUser = getCurrentUser();
+    let redirectTarget = "";
+    if (!sessionUser) redirectTarget = "auth.html";
+    else if (!isAdmin(sessionUser)) redirectTarget = getDashboardUrl(sessionUser);
+
+    if (redirectTarget) {
+      document.body.hidden = true;
+      window.location.href = redirectTarget;
+    }
+
+    const user = sessionUser || { name: "" };
 
     const adminTitle = document.getElementById("adminTitle");
+    const editTitle = document.getElementById("editTitle");
     const adminList = document.getElementById("adminList");
     const adminForm = document.getElementById("adminForm");
     const adminNotice = document.getElementById("adminNotice");
@@ -274,8 +364,8 @@
     const statUsers = document.getElementById("statUsers");
     const statVerified = document.getElementById("statVerified");
     const statFeatured = document.getElementById("statFeatured");
-    const logoutBtn = document.getElementById("logoutBtn");
     const resetBtn = document.getElementById("resetBtn");
+    const adminSearch = document.getElementById("adminSearch");
 
     adminTitle.textContent = `Hola, ${user.name}`;
 
@@ -287,10 +377,20 @@
       categorySelect.appendChild(option);
     });
 
+    const photoManager = createPhotoManager({
+      mainInputId: "mainImageInput",
+      galleryInputId: "galleryImageInput",
+      mainDropId: "mainDrop",
+      galleryDropId: "galleryDrop",
+      mainPreviewId: "mainPreview",
+      galleryPreviewId: "galleryPreview",
+      onError: showNotice
+    });
+
     function showNotice(msg) {
       adminNotice.textContent = msg;
       adminNotice.style.display = "block";
-      setTimeout(() => adminNotice.style.display = "none", 2200);
+      setTimeout(() => adminNotice.style.display = "none", 2400);
     }
 
     function renderStats() {
@@ -302,18 +402,44 @@
       statFeatured.textContent = allBusinesses.filter(b => b.destacado).length;
     }
 
+    function getFilteredBusinesses() {
+      const query = adminSearch.value.trim().toLowerCase();
+      if (!query) return getBusinesses();
+
+      return getBusinesses().filter(b => [
+        b.nombre,
+        b.ownerEmail,
+        b.categoriaLabel,
+        b.ubicacion,
+        b.descripcion
+      ].join(" ").toLowerCase().includes(query));
+    }
+
     function renderList() {
-      const allBusinesses = getBusinesses();
+      const allBusinesses = getFilteredBusinesses();
+
+      if (!allBusinesses.length) {
+        adminList.innerHTML = `
+          <div class="empty-state">
+            No hay negocios que coincidan con la búsqueda.
+          </div>
+        `;
+        renderStats();
+        return;
+      }
 
       adminList.innerHTML = allBusinesses.map(b => `
         <div class="admin-card">
-          <div class="admin-card-top">
-            <div>
-              <h3>${b.nombre}</h3>
-              <div class="admin-meta">
-                ${b.categoriaLabel} · ${b.ubicacion}<br/>
-                Dueño: ${b.ownerEmail}<br/>
-                ${b.verificado ? "✔ Verificado" : "◌ Sin verificar"} · ${b.destacado ? "⭐ Destacado" : "Normal"}
+          <img src="${escapeHTML(getBusinessMainImage(b))}" alt="${escapeHTML(b.nombre)}" />
+          <div>
+            <div class="admin-card-top">
+              <div>
+                <h3>${escapeHTML(b.nombre)}</h3>
+                <div class="admin-meta">
+                  ${escapeHTML(b.categoriaLabel)} · ${escapeHTML(b.ubicacion)}<br/>
+                  Dueño: ${escapeHTML(b.ownerEmail)}<br/>
+                  ${b.verificado ? "Verificado" : "Sin verificar"} · ${b.destacado ? "Destacado" : "Normal"} · ${getBusinessGallery(b).length} foto${getBusinessGallery(b).length === 1 ? "" : "s"}
+                </div>
               </div>
             </div>
 
@@ -330,8 +456,16 @@
       renderStats();
     }
 
+    function resetForm() {
+      adminForm.reset();
+      document.getElementById("businessId").value = "";
+      document.getElementById("bannerColor").value = "#2ee59d";
+      photoManager.clear();
+      editTitle.textContent = "Editar negocio";
+    }
+
     window.loadBusiness = function(id) {
-      const b = getBusinesses().find(x => x.id === id);
+      const b = getBusinesses().find(x => Number(x.id) === Number(id));
       if (!b) return;
 
       document.getElementById("businessId").value = b.id;
@@ -340,38 +474,54 @@
       document.getElementById("ubicacion").value = b.ubicacion;
       document.getElementById("telefono").value = b.telefono;
       document.getElementById("horario").value = b.horario;
-      document.getElementById("imagen").value = b.imagen;
       document.getElementById("descripcion").value = b.descripcion;
       document.getElementById("sitio").value = b.sitio || "";
       document.getElementById("instagram").value = b.instagram || "";
       document.getElementById("bannerColor").value = b.bannerColor || "#2ee59d";
+      photoManager.setImages({ imagen: b.imagen, galeria: b.galeria });
+      editTitle.textContent = `Editando ${b.nombre}`;
       showNotice("Negocio cargado para edición.");
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     window.toggleVerified = function(id) {
-      const b = getBusinesses().find(x => x.id === id);
+      const b = getBusinesses().find(x => Number(x.id) === Number(id));
       if (!b) return;
       updateBusiness(id, { verificado: !b.verificado });
       renderList();
     };
 
     window.toggleFeatured = function(id) {
-      const b = getBusinesses().find(x => x.id === id);
+      const b = getBusinesses().find(x => Number(x.id) === Number(id));
       if (!b) return;
       updateBusiness(id, { destacado: !b.destacado });
       renderList();
     };
 
     window.deleteOne = function(id) {
+      const b = getBusinesses().find(x => Number(x.id) === Number(id));
+      if (!b) return;
+      if (!confirm(`¿Eliminar ${b.nombre}?`)) return;
       deleteBusiness(id);
+      resetForm();
       renderList();
     };
 
-    adminForm.addEventListener("submit", (e) => {
+    adminForm.addEventListener("submit", e => {
       e.preventDefault();
 
       const id = document.getElementById("businessId").value;
+      if (!id) {
+        showNotice("Selecciona un negocio antes de guardar cambios.");
+        return;
+      }
+
+      const media = photoManager.getImages();
+      if (!media.imagen) {
+        showNotice("Agrega una foto principal antes de guardar.");
+        return;
+      }
+
       const patch = {
         nombre: document.getElementById("nombre").value.trim(),
         categoria: document.getElementById("categoria").value,
@@ -379,35 +529,30 @@
         telefono: document.getElementById("telefono").value.trim(),
         whatsapp: document.getElementById("telefono").value.trim(),
         horario: document.getElementById("horario").value.trim(),
-        imagen: document.getElementById("imagen").value.trim(),
+        imagen: media.imagen,
+        galeria: media.galeria,
         descripcion: document.getElementById("descripcion").value.trim(),
         sitio: document.getElementById("sitio").value.trim(),
         instagram: document.getElementById("instagram").value.trim(),
-        bannerColor: document.getElementById("bannerColor").value.trim() || "#2ee59d"
+        bannerColor: document.getElementById("bannerColor").value || "#2ee59d"
       };
 
       updateBusiness(id, patch);
-      adminForm.reset();
-      document.getElementById("businessId").value = "";
+      resetForm();
       showNotice("Cambios guardados.");
       renderList();
     });
 
     resetBtn.addEventListener("click", () => {
-      adminForm.reset();
-      document.getElementById("businessId").value = "";
+      resetForm();
       showNotice("Formulario limpio.");
     });
 
-    logoutBtn.addEventListener("click", () => {
-      clearSession();
-      window.location.href = "index.html";
-    });
-
+    adminSearch.addEventListener("input", renderList);
     renderList();
   </script>
   <script>
-  renderSessionNav("navActions");
-</script>
+    renderSessionNav("navActions");
+  </script>
 </body>
 </html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Findex | Directorio de PYMES</title>
-  <meta name="description" content="Encuentra negocios locales, descubre categorías y conecta con PYMES cerca de ti." />
+  <meta name="description" content="Explora negocios locales, filtra por categoría y conecta rápido con PYMES cerca de ti." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,120 +12,142 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
+    <a class="brand" href="index.html" aria-label="Findex">
       <div class="brand-mark">F</div>
       <span class="brand-name">FINDEX</span>
-    </div>
+    </a>
 
     <nav class="nav-links">
       <a href="#inicio">Inicio</a>
+      <a href="#destacados">Destacados</a>
+      <a href="#explorar">Explorar</a>
       <a href="#categorias">Categorías</a>
-      <a href="#destacados">Negocios</a>
-      <a href="#planes">Planes</a>
-      <a href="#nosotros">Nosotros</a>
+      <a href="#empresas">Empresas</a>
     </nav>
 
     <div class="nav-actions" id="navActions"></div>
   </header>
 
   <main>
-    <section class="hero" id="inicio">
+    <section class="hero client-hero" id="inicio">
       <div class="hero-copy">
-        <div class="eyebrow">Directorio de PYMES verificadas</div>
-        <h1>Encuentra negocios.<br><span>Impulsa tu mundo.</span></h1>
+        <div class="eyebrow">Directorio local para clientes</div>
+        <h1>Encuentra el negocio ideal <span>sin perder tiempo.</span></h1>
         <p>
-          Descubre negocios locales cerca de ti, compara categorías y conecta con emprendedores
-          de forma rápida, limpia y profesional.
+          Explora comercios cercanos, compara categorías, revisa horarios y contacta directo
+          desde una plataforma visual, rápida y pensada para descubrir opciones reales.
         </p>
 
-        <div class="search-panel">
-          <div class="search-field">
-            <label for="searchInput">Buscar</label>
-            <input id="searchInput" type="text" placeholder="¿Qué estás buscando?" autocomplete="off" />
-          </div>
-
-          <div class="search-field">
-            <label for="locationFilter">Ubicación</label>
-            <select id="locationFilter">
-              <option value="">Cualquiera</option>
-            </select>
-          </div>
-
-          <div class="search-field">
-            <label for="categoryFilter">Categoría</label>
-            <select id="categoryFilter">
-              <option value="">Todas las categorías</option>
-            </select>
-          </div>
-
-          <button class="search-button" id="searchButton" type="button">Buscar</button>
-        </div>
-
         <div class="hero-actions">
-          <button class="btn btn-primary">Explorar categorías</button>
-          <button class="btn btn-ghost">Ver planes</button>
+          <a class="btn btn-primary" href="#explorar">Buscar negocios</a>
+          <a class="btn btn-ghost" href="auth.html">Crear cuenta de cliente</a>
         </div>
       </div>
 
-      <div class="hero-visual">
-        <img
-          src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80"
-          alt="Negocio local"
-        />
+      <aside class="client-panel" aria-label="Resumen del directorio">
+        <div class="client-panel-top">
+          <span class="eyebrow mini-eyebrow">Exploración activa</span>
+          <h2>Negocios listos para descubrir</h2>
+          <p>La experiencia principal está pensada para clientes: buscar, filtrar, entrar al perfil y contactar.</p>
+        </div>
 
-        <div class="stats-card">
-          <div class="stats-head">
-            <span>Negocios activos</span>
+        <div class="client-stats">
+          <div>
             <strong id="activeCount">0</strong>
+            <span>negocios</span>
           </div>
-
-          <div class="mini-chart" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span>
+          <div>
+            <strong id="featuredCount">0</strong>
+            <span>destacados</span>
           </div>
-
-          <div class="stats-footer">
-            <span>+18.6% este mes</span>
-            <small>Crecimiento constante</small>
+          <div>
+            <strong id="categoryCount">0</strong>
+            <span>categorías</span>
           </div>
         </div>
+
+        <div class="client-panel-action">
+          <a href="#destacados">Ver destacados</a>
+        </div>
+      </aside>
+    </section>
+
+    <section class="featured-section" id="destacados">
+      <div class="section-head">
+        <div>
+          <h2>Negocios destacados</h2>
+          <p>Una vitrina dinámica para los perfiles con mayor visibilidad dentro de Findex.</p>
+        </div>
+        <span class="pill">Pasan automáticamente</span>
       </div>
+
+      <div class="featured-carousel" aria-label="Carrusel de negocios destacados">
+        <button class="carousel-arrow left" id="featuredPrev" type="button" aria-label="Negocio destacado anterior">‹</button>
+        <div class="featured-track" id="featuredTrack"></div>
+        <button class="carousel-arrow right" id="featuredNext" type="button" aria-label="Siguiente negocio destacado">›</button>
+      </div>
+      <div class="carousel-dots" id="featuredDots" aria-label="Indicadores de destacados"></div>
+    </section>
+
+    <section class="content-section explorer-section" id="explorar">
+      <div class="section-head">
+        <div>
+          <h2>Explorar negocios</h2>
+          <p id="resultsSummary">Busca por nombre, categoría, ubicación o descripción.</p>
+        </div>
+        <a class="section-link" href="#categorias">Ver categorías</a>
+      </div>
+
+      <div class="search-panel explorer-search">
+        <div class="search-field">
+          <label for="searchInput">Buscar</label>
+          <input id="searchInput" type="text" placeholder="Restaurante, ferretería, tecnología..." autocomplete="off" />
+        </div>
+
+        <div class="search-field">
+          <label for="locationFilter">Ubicación</label>
+          <select id="locationFilter">
+            <option value="">Cualquiera</option>
+          </select>
+        </div>
+
+        <div class="search-field">
+          <label for="categoryFilter">Categoría</label>
+          <select id="categoryFilter">
+            <option value="">Todas</option>
+          </select>
+        </div>
+
+        <button class="search-button" id="searchButton" type="button">Buscar</button>
+      </div>
+
+      <div class="business-grid" id="businessGrid"></div>
     </section>
 
     <section class="content-section" id="categorias">
       <div class="section-head">
         <div>
           <h2>Explora por categorías</h2>
-          <p>Empieza por el tipo de negocio que quieres descubrir.</p>
+          <p>Empieza por el tipo de negocio y afina resultados al instante.</p>
         </div>
-        <a href="#destacados" class="section-link">Ver negocios destacados →</a>
+        <a href="#explorar" class="section-link">Volver a búsqueda</a>
       </div>
 
       <div class="category-grid" id="categoryGrid"></div>
     </section>
 
-    <section class="content-section" id="destacados">
-      <div class="section-head">
-        <div>
-          <h2>Negocios destacados</h2>
-          <p>Resultados seleccionados para mostrar la mejor calidad visual.</p>
-        </div>
-        <span class="pill">Verificados</span>
-      </div>
-
-      <div class="business-grid" id="businessGrid"></div>
-    </section>
-
-    <section class="cta-section" id="planes">
+    <section class="cta-section" id="empresas">
       <div class="cta-copy">
-        <span class="eyebrow">¿Tienes un negocio?</span>
-        <h2>Haz crecer tu negocio con Findex</h2>
+        <span class="eyebrow">Para empresas</span>
+        <h2>Publica tu negocio con una presencia visual seria</h2>
         <p>
-          Consigue más visibilidad, más clientes y una presencia digital que se vea seria desde el primer segundo.
+          Crea una cuenta de empresa, elige un plan y administra tu perfil con foto principal,
+          galería, datos de contacto y visibilidad destacada según tu plan.
         </p>
 
         <div class="cta-actions">
-          <a class="btn btn-primary" href="auth.html">Registrar mi negocio</a>
-          <button class="btn btn-ghost">Ver planes y precios</button>
+          <a class="btn btn-primary" href="auth.html?tipo=empresa">Crear cuenta de empresa</a>
+          <a class="btn btn-ghost" href="planes.html">Ver planes</a>
         </div>
       </div>
 
@@ -133,44 +155,44 @@
         <div class="benefit-card">
           <div class="benefit-icon">↗</div>
           <h3>Más visibilidad</h3>
-          <p>Aparece frente a personas que realmente buscan lo que ofreces.</p>
+          <p>Aparece frente a personas que buscan negocios como el tuyo.</p>
         </div>
 
         <div class="benefit-card">
-          <div class="benefit-icon">◎</div>
-          <h3>Más clientes</h3>
-          <p>Conecta con usuarios por categoría, ubicación y necesidad.</p>
+          <div class="benefit-icon">●</div>
+          <h3>Perfil completo</h3>
+          <p>Publica foto principal, galería, horarios y canales de contacto.</p>
         </div>
 
         <div class="benefit-card">
           <div class="benefit-icon">▣</div>
-          <h3>Estadísticas</h3>
-          <p>Mide interés, visitas y desempeño de tu negocio dentro de la plataforma.</p>
+          <h3>Planes claros</h3>
+          <p>Elige el nivel que se adapta a la cantidad de negocios que manejas.</p>
         </div>
 
         <div class="benefit-card">
-          <div class="benefit-icon">◉</div>
-          <h3>Soporte premium</h3>
-          <p>Recibe acompañamiento para mantener tu perfil siempre optimizado.</p>
+          <div class="benefit-icon">◎</div>
+          <h3>Control visual</h3>
+          <p>Administra las imágenes que ven los clientes al entrar a tu perfil.</p>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer" id="nosotros">
+  <footer class="footer">
     <div>
-      <div class="brand footer-brand">
+      <a class="brand footer-brand" href="index.html" aria-label="Findex">
         <div class="brand-mark">F</div>
         <span class="brand-name">FINDEX</span>
-      </div>
-      <p>Un directorio moderno de PYMES pensado para crecer con negocios reales.</p>
+      </a>
+      <p>Un directorio moderno de PYMES pensado para clientes que buscan y negocios que quieren crecer.</p>
     </div>
 
     <div class="footer-links">
       <a href="#inicio">Inicio</a>
+      <a href="#destacados">Destacados</a>
       <a href="#categorias">Categorías</a>
-      <a href="#planes">Planes</a>
-      <a href="#nosotros">Nosotros</a>
+      <a href="#empresas">Empresas</a>
     </div>
   </footer>
 

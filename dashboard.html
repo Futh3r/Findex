@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mi panel | Findex</title>
+  <title>Panel de empresa | Findex</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
   <style>
     .dash-wrap{
-      width:min(1200px, calc(100% - 32px));
+      width:min(1220px, calc(100% - 32px));
       margin:0 auto;
       padding:34px 0 48px;
     }
@@ -27,22 +27,24 @@
     .dash-head h1{
       font-size:clamp(2rem, 4vw, 3rem);
       margin-bottom:8px;
+      letter-spacing:0;
     }
 
     .dash-head p{
       color:#94a3b8;
       line-height:1.7;
+      max-width:68ch;
     }
 
     .dashboard-grid{
       display:grid;
-      grid-template-columns:0.9fr 1.1fr;
+      grid-template-columns:0.95fr 1.05fr;
       gap:22px;
       align-items:start;
     }
 
     .panel{
-      background:rgba(15,23,42,0.9);
+      background:rgba(15,23,42,0.92);
       border:1px solid rgba(148,163,184,0.16);
       border-radius:28px;
       padding:24px;
@@ -50,33 +52,41 @@
     }
 
     .panel h2{
-      margin-bottom:14px;
+      margin-bottom:10px;
+      letter-spacing:0;
     }
 
     .summary{
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:12px;
-      margin-top:16px;
+      margin:16px 0 18px;
     }
 
     .summary-card{
       padding:14px;
       border-radius:18px;
-      background:rgba(255,255,255,0.03);
+      background:rgba(255,255,255,0.035);
       border:1px solid rgba(255,255,255,0.06);
     }
 
     .summary-card strong{
       display:block;
-      font-size:1.2rem;
+      font-size:1.25rem;
       margin-bottom:4px;
+      color:#2ee59d;
+    }
+
+    .summary-card span{
+      color:#cbd5e1;
+      font-size:0.9rem;
     }
 
     .form-grid{
       display:grid;
       grid-template-columns:repeat(2,1fr);
       gap:14px;
+      margin-top:16px;
     }
 
     .field{
@@ -91,7 +101,7 @@
 
     .field label{
       color:#cbd5e1;
-      font-weight:600;
+      font-weight:700;
       font-size:0.92rem;
     }
 
@@ -107,6 +117,11 @@
       outline:none;
     }
 
+    .field input[type="color"]{
+      min-height:48px;
+      padding:6px;
+    }
+
     .field textarea{
       min-height:120px;
       resize:vertical;
@@ -119,15 +134,20 @@
     }
 
     .mine-card{
-      padding:16px;
-      border-radius:18px;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.06);
-      display:flex;
-      justify-content:space-between;
+      display:grid;
+      grid-template-columns:118px 1fr;
       gap:14px;
-      align-items:flex-start;
-      flex-wrap:wrap;
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.07);
+    }
+
+    .mine-card img{
+      width:118px;
+      height:112px;
+      object-fit:cover;
+      border-radius:14px;
     }
 
     .mine-card h3{
@@ -138,6 +158,7 @@
       color:#94a3b8;
       font-size:0.92rem;
       line-height:1.6;
+      margin-bottom:12px;
     }
 
     .mine-actions{
@@ -148,23 +169,13 @@
 
     .badge-plan{
       display:inline-flex;
-      padding:9px 12px;
+      padding:10px 14px;
       border-radius:999px;
       background:rgba(46,229,157,0.12);
       color:#2ee59d;
       border:1px solid rgba(46,229,157,0.16);
-      font-weight:700;
+      font-weight:800;
       font-size:0.9rem;
-    }
-
-    .notice{
-      margin-top:12px;
-      padding:12px 14px;
-      border-radius:14px;
-      background:rgba(46,229,157,0.1);
-      color:#2ee59d;
-      border:1px solid rgba(46,229,157,0.14);
-      display:none;
     }
 
     .error{
@@ -175,36 +186,38 @@
       color:#fecaca;
       border:1px solid rgba(239,68,68,0.18);
       display:none;
+      line-height:1.6;
     }
 
-    .subtle{
-      color:#94a3b8;
-      line-height:1.7;
-    }
-
-    @media (max-width: 980px){
+    @media (max-width: 1000px){
       .dashboard-grid{
         grid-template-columns:1fr;
       }
     }
 
-    @media (max-width: 700px){
-      .form-grid{
+    @media (max-width: 720px){
+      .form-grid,
+      .summary{
         grid-template-columns:1fr;
       }
 
-      .summary{
+      .mine-card{
         grid-template-columns:1fr;
+      }
+
+      .mine-card img{
+        width:100%;
+        height:190px;
       }
     }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
+    <a class="brand" href="index.html" aria-label="Findex">
       <div class="brand-mark">F</div>
       <span class="brand-name">FINDEX</span>
-    </div>
+    </a>
 
     <nav class="nav-links">
       <a href="index.html">Inicio</a>
@@ -213,24 +226,21 @@
     </nav>
 
     <div class="nav-actions" id="navActions"></div>
-      <button class="btn btn-ghost" id="logoutBtn" type="button">Cerrar sesión</button>
-      <a class="btn btn-primary" href="registrar.html">Nuevo negocio</a>
-    </div>
   </header>
 
   <main class="dash-wrap">
     <section class="dash-head">
       <div>
-        <div class="eyebrow">Panel del negocio</div>
+        <div class="eyebrow">Panel de empresa</div>
         <h1 id="welcomeTitle">Bienvenido</h1>
-        <p id="welcomeText">Administra tu cuenta, plan y negocios desde un solo lugar.</p>
+        <p id="welcomeText">Administra tus negocios, fotos y datos de contacto desde un solo lugar.</p>
       </div>
       <div id="planBadge" class="badge-plan"></div>
     </section>
 
     <section class="dashboard-grid">
       <article class="panel">
-        <h2>Agregar negocio</h2>
+        <h2 id="formHeading">Publicar negocio</h2>
         <p class="subtle" id="planExplanation"></p>
 
         <form id="businessForm" class="form-grid">
@@ -260,8 +270,8 @@
           </div>
 
           <div class="field">
-            <label for="imagen">URL de imagen</label>
-            <input id="imagen" type="url" required />
+            <label for="bannerColor">Color de marca</label>
+            <input id="bannerColor" type="color" value="#2ee59d" />
           </div>
 
           <div class="field full">
@@ -280,12 +290,35 @@
           </div>
 
           <div class="field full">
-            <label for="bannerColor">Color de marca</label>
-            <input id="bannerColor" type="text" placeholder="#2ee59d" />
+            <label>Fotos del negocio</label>
+            <div class="image-manager">
+              <div class="image-upload-grid">
+                <div class="upload-zone" id="mainDrop">
+                  <strong>Foto principal</strong>
+                  <small>Será la imagen que aparece en el directorio y el encabezado del perfil.</small>
+                  <input class="sr-only" id="mainImageInput" type="file" accept="image/*" />
+                  <label class="btn btn-ghost" for="mainImageInput">Subir imagen</label>
+                </div>
+                <div id="mainPreview"></div>
+              </div>
+
+              <div class="image-upload-grid">
+                <div class="upload-zone" id="galleryDrop">
+                  <strong>Fotos adicionales</strong>
+                  <small>Agrega ambiente, productos, trabajos o detalles visuales del negocio.</small>
+                  <input class="sr-only" id="galleryImageInput" type="file" accept="image/*" multiple />
+                  <label class="btn btn-ghost" for="galleryImageInput">Subir galería</label>
+                </div>
+                <div class="preview-grid" id="galleryPreview"></div>
+              </div>
+            </div>
           </div>
 
           <div class="field full">
-            <button class="btn btn-primary" id="saveBtn" type="submit">Guardar negocio</button>
+            <div class="mine-actions">
+              <button class="btn btn-primary" id="saveBtn" type="submit">Publicar negocio</button>
+              <button class="btn btn-ghost" id="cancelEditBtn" type="button" style="display:none;">Cancelar edición</button>
+            </div>
           </div>
         </form>
 
@@ -295,12 +328,12 @@
 
       <article class="panel">
         <h2>Mis negocios</h2>
-        <p class="subtle">Puedes editar o eliminar solo los negocios de tu cuenta.</p>
+        <p class="subtle">Revisa cómo se ven, edita información o cambia las fotos cuando lo necesites.</p>
 
         <div class="summary">
           <div class="summary-card">
             <strong id="totalMine">0</strong>
-            <span>Negocios tuyos</span>
+            <span>Negocios</span>
           </div>
           <div class="summary-card">
             <strong id="featuredMine">0</strong>
@@ -318,11 +351,21 @@
   </main>
 
   <script src="data.js"></script>
+  <script src="media-manager.js"></script>
   <script>
-    const user = getCurrentUser();
-    if (!user) window.location.href = "auth.html";
-    if (!user.plan) window.location.href = "planes.html";
-    if (isAdmin(user)) window.location.href = "admin.html";
+    const sessionUser = getCurrentUser();
+    let redirectTarget = "";
+    if (!sessionUser) redirectTarget = "auth.html?tipo=empresa";
+    else if (isAdmin(sessionUser)) redirectTarget = "admin.html";
+    else if (!isBusinessUser(sessionUser)) redirectTarget = "index.html#explorar";
+    else if (!sessionUser.plan) redirectTarget = "planes.html";
+
+    if (redirectTarget) {
+      document.body.hidden = true;
+      window.location.href = redirectTarget;
+    }
+
+    const user = sessionUser || { name: "", email: "", plan: null };
 
     const welcomeTitle = document.getElementById("welcomeTitle");
     const welcomeText = document.getElementById("welcomeText");
@@ -336,33 +379,14 @@
     const limitNotice = document.getElementById("limitNotice");
     const formError = document.getElementById("formError");
     const saveBtn = document.getElementById("saveBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    const formHeading = document.getElementById("formHeading");
 
     const categoriaSelect = document.getElementById("categoria");
     const advancedFields = document.querySelectorAll(".advanced-only");
 
     let editingId = null;
-
-    categories.forEach(cat => {
-      const option = document.createElement("option");
-      option.value = cat.key;
-      option.textContent = cat.label;
-      categoriaSelect.appendChild(option);
-    });
-
-    const plan = planDefinitions.find(p => p.key === user.plan);
-    welcomeTitle.textContent = `Hola, ${user.name}`;
-    welcomeText.textContent = `Este es tu panel personal. Aquí administras tu plan ${plan?.label || ""} y tus negocios.`;
-    planBadge.textContent = `Plan ${plan?.label || "sin plan"}`;
-    planExplanation.textContent = `${plan?.description || ""} ${plan?.extraFields ? "Tu plan permite más personalización." : "Tu plan está enfocado en lo esencial."}`;
-
-    if (plan?.extraFields) {
-      advancedFields.forEach(el => el.style.display = "flex");
-    } else {
-      advancedFields.forEach(el => el.style.display = "none");
-    }
-
-    planLimit.textContent = plan?.maxBusinesses === 10 ? "10" : String(plan?.maxBusinesses || 1);
+    const plan = getPlanDefinition(user?.plan);
 
     function showError(msg) {
       formError.textContent = msg;
@@ -381,17 +405,76 @@
       formError.style.display = "none";
     }
 
+    const photoManager = createPhotoManager({
+      mainInputId: "mainImageInput",
+      galleryInputId: "galleryImageInput",
+      mainDropId: "mainDrop",
+      galleryDropId: "galleryDrop",
+      mainPreviewId: "mainPreview",
+      galleryPreviewId: "galleryPreview",
+      onError: showError
+    });
+
+    categories.forEach(cat => {
+      const option = document.createElement("option");
+      option.value = cat.key;
+      option.textContent = cat.label;
+      categoriaSelect.appendChild(option);
+    });
+
+    welcomeTitle.textContent = `Hola, ${user.name}`;
+    welcomeText.textContent = `Este es tu panel de empresa. Tu plan ${plan?.label || ""} permite publicar y administrar tus perfiles.`;
+    planBadge.textContent = `Plan ${plan?.label || "sin plan"}`;
+    planExplanation.textContent = `${plan?.description || ""} ${plan?.extraFields ? "También puedes agregar enlaces externos y redes." : "El plan básico mantiene tu perfil simple y directo."}`;
+    planLimit.textContent = String(plan?.maxBusinesses || 1);
+
+    advancedFields.forEach(el => {
+      el.style.display = plan?.extraFields ? "flex" : "none";
+    });
+
+    function resetForm() {
+      editingId = null;
+      businessForm.reset();
+      document.getElementById("bannerColor").value = "#2ee59d";
+      photoManager.clear();
+      formHeading.textContent = "Publicar negocio";
+      saveBtn.textContent = "Publicar negocio";
+      cancelEditBtn.style.display = "none";
+      clearMessages();
+      renderMyBusinesses();
+    }
+
+    function getPayload() {
+      const media = photoManager.getImages();
+      return {
+        nombre: document.getElementById("nombre").value.trim(),
+        categoria: document.getElementById("categoria").value,
+        ubicacion: document.getElementById("ubicacion").value.trim(),
+        telefono: document.getElementById("telefono").value.trim(),
+        whatsapp: document.getElementById("telefono").value.trim(),
+        horario: document.getElementById("horario").value.trim(),
+        imagen: media.imagen,
+        galeria: media.galeria,
+        descripcion: document.getElementById("descripcion").value.trim(),
+        sitio: document.getElementById("sitio").value.trim(),
+        instagram: document.getElementById("instagram").value.trim(),
+        bannerColor: document.getElementById("bannerColor").value || "#2ee59d"
+      };
+    }
+
     function renderMyBusinesses() {
       const list = getOwnerBusinesses(user.email);
+      const limit = plan?.maxBusinesses || 1;
+
       totalMine.textContent = list.length;
       featuredMine.textContent = list.filter(b => b.destacado).length;
 
-      const limit = plan?.maxBusinesses || 1;
-      if (list.length >= limit) {
-        saveBtn.disabled = true;
-        showNotice(`Has alcanzado el límite de tu plan (${limit} negocio(s)). Puedes actualizar tu plan para agregar más.`);
-      } else {
-        saveBtn.disabled = false;
+      const atLimit = list.length >= limit && !editingId;
+      saveBtn.disabled = atLimit;
+
+      if (atLimit) {
+        showNotice(`Has alcanzado el límite de tu plan (${limit} negocio${limit === 1 ? "" : "s"}).`);
+      } else if (!editingId) {
         clearMessages();
       }
 
@@ -406,26 +489,26 @@
 
       myBusinesses.innerHTML = list.map(b => `
         <div class="mine-card">
+          <img src="${escapeHTML(getBusinessMainImage(b))}" alt="${escapeHTML(b.nombre)}" />
           <div>
-            <h3>${b.nombre}</h3>
+            <h3>${escapeHTML(b.nombre)}</h3>
             <div class="mine-meta">
-              ${b.categoriaLabel} · ${b.ubicacion}<br/>
-              ${b.verificado ? "✔ Verificado" : "◌ Pendiente de verificación"}<br/>
-              ${b.destacado ? "⭐ Destacado" : "Normal"}
+              ${escapeHTML(b.categoriaLabel)} · ${escapeHTML(b.ubicacion)}<br/>
+              ${b.verificado ? "Verificado" : "Pendiente de verificación"} · ${b.destacado ? "Destacado" : "Normal"}<br/>
+              ${getBusinessGallery(b).length} foto${getBusinessGallery(b).length === 1 ? "" : "s"}
             </div>
-          </div>
-
-          <div class="mine-actions">
-            <a class="btn btn-ghost" href="negocio.html?id=${b.id}">Ver</a>
-            <button class="btn btn-ghost" type="button" onclick="editBusiness(${b.id})">Editar</button>
-            <button class="btn btn-primary" type="button" onclick="removeBusiness(${b.id})">Eliminar</button>
+            <div class="mine-actions">
+              <a class="btn btn-ghost" href="negocio.html?id=${b.id}">Ver</a>
+              <button class="btn btn-ghost" type="button" onclick="editBusiness(${b.id})">Editar</button>
+              <button class="btn btn-primary" type="button" onclick="removeBusiness(${b.id})">Eliminar</button>
+            </div>
           </div>
         </div>
       `).join("");
     }
 
     window.editBusiness = function(id) {
-      const business = getBusinesses().find(b => b.id === id && b.ownerEmail === user.email);
+      const business = getBusinesses().find(b => Number(b.id) === Number(id) && b.ownerEmail === user.email);
       if (!business) return;
 
       editingId = id;
@@ -434,72 +517,59 @@
       document.getElementById("ubicacion").value = business.ubicacion;
       document.getElementById("telefono").value = business.telefono;
       document.getElementById("horario").value = business.horario;
-      document.getElementById("imagen").value = business.imagen;
       document.getElementById("descripcion").value = business.descripcion;
       document.getElementById("sitio").value = business.sitio || "";
       document.getElementById("instagram").value = business.instagram || "";
       document.getElementById("bannerColor").value = business.bannerColor || "#2ee59d";
+      photoManager.setImages({ imagen: business.imagen, galeria: business.galeria });
+
+      formHeading.textContent = "Editar negocio";
       saveBtn.textContent = "Actualizar negocio";
+      saveBtn.disabled = false;
+      cancelEditBtn.style.display = "inline-flex";
+      clearMessages();
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     window.removeBusiness = function(id) {
-      const business = getBusinesses().find(b => b.id === id && b.ownerEmail === user.email);
+      const business = getBusinesses().find(b => Number(b.id) === Number(id) && b.ownerEmail === user.email);
       if (!business) return;
+      if (!confirm(`¿Eliminar ${business.nombre}?`)) return;
+
       deleteBusiness(id);
-      if (editingId === id) editingId = null;
-      saveBtn.textContent = "Guardar negocio";
-      businessForm.reset();
+      if (editingId === id) resetForm();
       renderMyBusinesses();
     };
 
-    businessForm.addEventListener("submit", (e) => {
+    businessForm.addEventListener("submit", e => {
       e.preventDefault();
       clearMessages();
 
-      const list = getOwnerBusinesses(user.email);
-      const limit = plan?.maxBusinesses || 1;
-
-      if (!editingId && list.length >= limit) {
-        showError(`Tu plan ${plan?.label || ""} solo permite ${limit} negocio(s).`);
+      const payload = getPayload();
+      if (!payload.imagen) {
+        showError("Agrega una foto principal del negocio.");
         return;
       }
 
-      const payload = {
-        nombre: document.getElementById("nombre").value.trim(),
-        categoria: document.getElementById("categoria").value,
-        ubicacion: document.getElementById("ubicacion").value.trim(),
-        telefono: document.getElementById("telefono").value.trim(),
-        whatsapp: document.getElementById("telefono").value.trim(),
-        horario: document.getElementById("horario").value.trim(),
-        imagen: document.getElementById("imagen").value.trim(),
-        descripcion: document.getElementById("descripcion").value.trim(),
-        sitio: document.getElementById("sitio").value.trim(),
-        instagram: document.getElementById("instagram").value.trim(),
-        bannerColor: document.getElementById("bannerColor").value.trim() || "#2ee59d"
-      };
-
       if (editingId) {
         updateBusiness(editingId, payload);
-        editingId = null;
-        saveBtn.textContent = "Guardar negocio";
-      } else {
-        addBusiness(payload);
+        resetForm();
+        return;
       }
 
-      businessForm.reset();
-      renderMyBusinesses();
+      try {
+        addBusiness(payload);
+        resetForm();
+      } catch (err) {
+        showError(err.message || "No se pudo guardar el negocio.");
+      }
     });
 
-    logoutBtn.addEventListener("click", () => {
-      clearSession();
-      window.location.href = "index.html";
-    });
-
+    cancelEditBtn.addEventListener("click", resetForm);
     renderMyBusinesses();
   </script>
   <script>
-  renderSessionNav("navActions");
-</script>
+    renderSessionNav("navActions");
+  </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elegir plan | Findex</title>
+  <title>Planes para empresas | Findex</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -22,6 +22,7 @@
     .plans-head h1{
       font-size:clamp(2rem, 4vw, 3rem);
       margin-bottom:10px;
+      letter-spacing:0;
     }
 
     .plans-head p{
@@ -40,7 +41,7 @@
     .plan-card{
       border-radius:28px;
       border:1px solid rgba(148,163,184,0.16);
-      background:rgba(15,23,42,0.88);
+      background:rgba(15,23,42,0.9);
       padding:24px;
       box-shadow:0 24px 80px rgba(0,0,0,0.28);
       display:flex;
@@ -52,6 +53,11 @@
       border-color:rgba(46,229,157,0.34);
       box-shadow:0 24px 80px rgba(46,229,157,0.08);
       transform:translateY(-4px);
+    }
+
+    .plan-card.current{
+      border-color:rgba(56,189,248,0.38);
+      background:rgba(15,23,42,0.98);
     }
 
     .plan-top{
@@ -88,8 +94,8 @@
       gap:10px;
       padding:10px 12px;
       border-radius:14px;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.05);
+      background:rgba(255,255,255,0.035);
+      border:1px solid rgba(255,255,255,0.06);
     }
 
     @media (max-width: 900px){
@@ -101,21 +107,27 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">
+    <a class="brand" href="index.html" aria-label="Findex">
       <div class="brand-mark">F</div>
       <span class="brand-name">FINDEX</span>
-    </div>
+    </a>
+
+    <nav class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="index.html#explorar">Explorar</a>
+      <a href="index.html#categorias">Categorías</a>
+      <a href="index.html#empresas">Empresas</a>
+    </nav>
+
     <div class="nav-actions" id="navActions"></div>
-      <a class="btn btn-ghost" href="index.html">Inicio</a>
-    </div>
   </header>
 
   <main class="plans-wrap">
     <section class="plans-head">
-      <div class="eyebrow">Elige tu plan</div>
+      <div class="eyebrow">Planes para empresas</div>
       <h1>Selecciona el nivel que mejor se adapta a tu negocio</h1>
       <p>
-        Cada cuenta necesita elegir un plan antes de empezar a publicar. Puedes cambiarlo más adelante desde tu panel.
+        Los planes se aplican únicamente a cuentas de empresa. Puedes cambiarlo más adelante desde tu panel.
       </p>
     </section>
 
@@ -125,47 +137,54 @@
   <script src="data.js"></script>
   <script>
     const user = getCurrentUser();
-    if (!user) window.location.href = "auth.html";
+    let redirectTarget = "";
+    if (!user) redirectTarget = "auth.html?tipo=empresa";
+    else if (!isBusinessUser(user)) redirectTarget = "index.html#explorar";
+
+    if (redirectTarget) {
+      document.body.hidden = true;
+      window.location.href = redirectTarget;
+    }
 
     const plansGrid = document.getElementById("plansGrid");
 
-    plansGrid.innerHTML = planDefinitions.map(plan => `
-      <article class="plan-card ${plan.key === "premium" ? "featured" : ""}">
-        <div class="plan-top">
-          <div>
-            <h2>${plan.label}</h2>
-            <div class="plan-price">${plan.price}</div>
+    plansGrid.innerHTML = planDefinitions.map(plan => {
+      const isCurrent = user?.plan === plan.key;
+
+      return `
+        <article class="plan-card ${plan.key === "premium" ? "featured" : ""} ${isCurrent ? "current" : ""}">
+          <div class="plan-top">
+            <div>
+              <h2>${plan.label}</h2>
+              <div class="plan-price">${plan.price}</div>
+            </div>
+            ${isCurrent ? '<span class="pill">Plan actual</span>' : plan.key === "premium" ? '<span class="pill">Más recomendado</span>' : ""}
           </div>
-          ${plan.key === "premium" ? '<span class="pill">Más recomendado</span>' : ''}
-        </div>
 
-        <p class="plan-desc">${plan.description}</p>
+          <p class="plan-desc">${plan.description}</p>
 
-        <div class="plan-list">
-          <span>✔ ${plan.maxBusinesses === 10 ? "Hasta 10 negocios" : `Hasta ${plan.maxBusinesses} negocios`}</span>
-          <span>✔ ${plan.extraFields ? "Más personalización" : "Lo esencial para empezar"}</span>
-          <span>✔ ${plan.featured ? "Aparece en destacados" : "Sin destacados automáticos"}</span>
-        </div>
+          <div class="plan-list">
+            <span>✓ ${plan.maxBusinesses === 10 ? "Hasta 10 negocios" : `Hasta ${plan.maxBusinesses} negocio${plan.maxBusinesses === 1 ? "" : "s"}`}</span>
+            <span>✓ ${plan.extraFields ? "Más personalización visual" : "Perfil esencial para empezar"}</span>
+            <span>✓ ${plan.featured ? "Aparece en destacados" : "Sin destacados automáticos"}</span>
+          </div>
 
-        <button class="btn btn-primary" type="button" onclick="choosePlan('${plan.key}')">
-          Elegir ${plan.label}
-        </button>
-      </article>
-    `).join("");
+          <button class="btn btn-primary" type="button" onclick="choosePlan('${plan.key}')" ${isCurrent ? "disabled" : ""}>
+            ${isCurrent ? "Seleccionado" : `Elegir ${plan.label}`}
+          </button>
+        </article>
+      `;
+    }).join("");
 
     function choosePlan(planKey) {
       setUserPlan(planKey);
 
       const current = getCurrentUser();
-      if (isAdmin(current)) {
-        window.location.href = "admin.html";
-      } else {
-        window.location.href = "dashboard.html";
-      }
+      window.location.href = isAdmin(current) ? "admin.html" : "dashboard.html";
     }
   </script>
   <script>
-  renderSessionNav("navActions");
-</script>
+    renderSessionNav("navActions");
+  </script>
 </body>
 </html>
