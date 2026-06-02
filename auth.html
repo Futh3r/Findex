@@ -378,7 +378,8 @@
   <script src="data.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search);
-    const requestedType = params.get("tipo") === "empresa" ? ACCOUNT_TYPES.business : ACCOUNT_TYPES.client;
+    const requestedPlan = planDefinitions.some(plan => plan.key === params.get("plan")) ? params.get("plan") : "";
+    const requestedType = params.get("tipo") === "empresa" || requestedPlan ? ACCOUNT_TYPES.business : ACCOUNT_TYPES.client;
 
     function redirectAfterLogin(user) {
       if (isAdmin(user)) {
@@ -394,7 +395,12 @@
       window.location.href = "index.html#explorar";
     }
 
-    const existingUser = getCurrentUser();
+    let existingUser = getCurrentUser();
+    if (existingUser && requestedPlan && !isAdmin(existingUser)) {
+      setUserPlan(requestedPlan);
+      existingUser = getCurrentUser();
+    }
+
     if (existingUser) {
       document.body.hidden = true;
       redirectAfterLogin(existingUser);
@@ -547,11 +553,18 @@
             accountType: selectedAccountType
           });
 
+          if (selectedAccountType === ACCOUNT_TYPES.business && requestedPlan) {
+            user = setUserPlan(requestedPlan);
+          }
+
           showMessage("success", selectedAccountType === ACCOUNT_TYPES.business
             ? "Cuenta de empresa creada correctamente."
             : "Cuenta de cliente creada correctamente.");
         } else {
           user = await loginUser(email, password);
+          if (requestedPlan && !isAdmin(user)) {
+            user = setUserPlan(requestedPlan);
+          }
           showMessage("success", "Sesión iniciada correctamente.");
         }
 

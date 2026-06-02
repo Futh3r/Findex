@@ -18,6 +18,7 @@ let currentQuery = "";
 let currentLocation = "";
 let featuredIndex = 0;
 let featuredTimer = null;
+let featuredSignature = "";
 
 function renderHomeStats() {
   const allBusinesses = getBusinesses();
@@ -154,41 +155,62 @@ function renderFeaturedCarousel() {
   }
 
   featuredIndex = Math.min(featuredIndex, items.length - 1);
-  const business = items[featuredIndex];
-  const image = getBusinessMainImage(business);
-  const galleryCount = getBusinessGallery(business).length;
 
-  featuredTrack.innerHTML = `
-    <article class="featured-slide" style="--accent:${escapeHTML(business.bannerColor || "#2ee59d")}">
-      <div class="featured-image">
-        <img src="${escapeHTML(image)}" alt="${escapeHTML(business.nombre)}" />
-      </div>
-      <div class="featured-copy">
-        <span class="featured-kicker">${escapeHTML(business.categoriaLabel)} · ${escapeHTML(business.ubicacion)}</span>
-        <h3>${escapeHTML(business.nombre)}</h3>
-        <p>${escapeHTML(business.descripcion)}</p>
-        <div class="featured-meta">
-          <span>★ ${Number(business.rating || 0).toFixed(1)} (${business.reseñas || 0})</span>
-          <span>${galleryCount} foto${galleryCount === 1 ? "" : "s"}</span>
-          ${business.verificado ? "<span>Verificado</span>" : ""}
-        </div>
-        <div class="featured-actions">
-          <a class="btn btn-primary" href="negocio.html?id=${business.id}">Ver negocio</a>
-          <a class="btn btn-ghost" href="#explorar">Explorar más</a>
-        </div>
-      </div>
-    </article>
-  `;
+  const signature = items.map(b => `${b.id}:${b.nombre}:${getBusinessMainImage(b)}`).join("|");
+
+  if (signature !== featuredSignature) {
+    featuredSignature = signature;
+    featuredTrack.innerHTML = items.map(business => {
+      const image = getBusinessMainImage(business);
+      const galleryCount = getBusinessGallery(business).length;
+
+      return `
+        <article class="featured-slide" style="--accent:${escapeHTML(business.bannerColor || "#2ee59d")}">
+          <div class="featured-image">
+            <img src="${escapeHTML(image)}" alt="${escapeHTML(business.nombre)}" />
+          </div>
+          <div class="featured-copy">
+            <span class="featured-kicker">${escapeHTML(business.categoriaLabel)} · ${escapeHTML(business.ubicacion)}</span>
+            <h3>${escapeHTML(business.nombre)}</h3>
+            <p>${escapeHTML(business.descripcion)}</p>
+            <div class="featured-meta">
+              <span>★ ${Number(business.rating || 0).toFixed(1)} (${business.reseñas || 0})</span>
+              <span>${galleryCount} foto${galleryCount === 1 ? "" : "s"}</span>
+              ${business.verificado ? "<span>Verificado</span>" : ""}
+            </div>
+            <div class="featured-actions">
+              <a class="btn btn-primary" href="negocio.html?id=${business.id}">Ver negocio</a>
+              <a class="btn btn-ghost" href="#explorar">Explorar más</a>
+            </div>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    if (featuredDots) {
+      featuredDots.innerHTML = items.map((_, index) => `
+        <button class="${index === featuredIndex ? "active" : ""}" type="button" aria-label="Ver destacado ${index + 1}"></button>
+      `).join("");
+
+      featuredDots.querySelectorAll("button").forEach((button, index) => {
+        button.addEventListener("click", () => {
+          goToFeatured(index);
+        });
+      });
+    }
+  }
+
+  updateFeaturedCarousel();
+}
+
+function updateFeaturedCarousel() {
+  if (!featuredTrack) return;
+
+  featuredTrack.style.transform = `translate3d(-${featuredIndex * 100}%, 0, 0)`;
 
   if (featuredDots) {
-    featuredDots.innerHTML = items.map((_, index) => `
-      <button class="${index === featuredIndex ? "active" : ""}" type="button" aria-label="Ver destacado ${index + 1}"></button>
-    `).join("");
-
     featuredDots.querySelectorAll("button").forEach((button, index) => {
-      button.addEventListener("click", () => {
-        goToFeatured(index);
-      });
+      button.classList.toggle("active", index === featuredIndex);
     });
   }
 }
@@ -198,7 +220,7 @@ function goToFeatured(index) {
   if (!items.length) return;
 
   featuredIndex = (index + items.length) % items.length;
-  renderFeaturedCarousel();
+  updateFeaturedCarousel();
   restartFeaturedTimer();
 }
 
@@ -209,7 +231,7 @@ function restartFeaturedTimer() {
 
   featuredTimer = setInterval(() => {
     featuredIndex = (featuredIndex + 1) % items.length;
-    renderFeaturedCarousel();
+    updateFeaturedCarousel();
   }, 5200);
 }
 

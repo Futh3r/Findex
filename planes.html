@@ -28,7 +28,21 @@
     .plans-head p{
       color:#94a3b8;
       line-height:1.8;
-      max-width:58ch;
+      max-width:62ch;
+    }
+
+    .plans-note{
+      margin-top:18px;
+      padding:14px 16px;
+      border-radius:18px;
+      background:rgba(46,229,157,0.08);
+      border:1px solid rgba(46,229,157,0.18);
+      color:#cbd5e1;
+      line-height:1.7;
+    }
+
+    .plans-note strong{
+      color:#2ee59d;
     }
 
     .plans-grid{
@@ -98,9 +112,17 @@
       border:1px solid rgba(255,255,255,0.06);
     }
 
+    .plan-card .btn{
+      margin-top:auto;
+    }
+
     @media (max-width: 900px){
       .plans-grid{
         grid-template-columns:1fr;
+      }
+
+      .plan-card.featured{
+        transform:none;
       }
     }
   </style>
@@ -127,8 +149,10 @@
       <div class="eyebrow">Planes para empresas</div>
       <h1>Selecciona el nivel que mejor se adapta a tu negocio</h1>
       <p>
-        Los planes se aplican únicamente a cuentas de empresa. Puedes cambiarlo más adelante desde tu panel.
+        Puedes revisar los planes aunque estés usando una cuenta de cliente. Si eliges uno,
+        Findex convierte tu cuenta en empresa y abre tu panel para publicar negocios.
       </p>
+      <div class="plans-note" id="plansNote"></div>
     </section>
 
     <div class="plans-grid" id="plansGrid"></div>
@@ -136,20 +160,33 @@
 
   <script src="data.js"></script>
   <script>
-    const user = getCurrentUser();
-    let redirectTarget = "";
-    if (!user) redirectTarget = "auth.html?tipo=empresa";
-    else if (!isBusinessUser(user)) redirectTarget = "index.html#explorar";
+    const currentUser = getCurrentUser();
+    const plansGrid = document.getElementById("plansGrid");
+    const plansNote = document.getElementById("plansNote");
 
-    if (redirectTarget) {
-      document.body.hidden = true;
-      window.location.href = redirectTarget;
+    function getPlansNote() {
+      if (!currentUser) {
+        return "<strong>Sin sesión:</strong> puedes ver los planes y crear una cuenta de empresa al elegir uno.";
+      }
+
+      if (isClientUser(currentUser)) {
+        return "<strong>Cuenta de cliente activa:</strong> elegir un plan transformará tu cuenta en empresa sin perder tu sesión.";
+      }
+
+      return `<strong>Cuenta de empresa activa:</strong> estás viendo opciones para tu plan actual.`;
     }
 
-    const plansGrid = document.getElementById("plansGrid");
+    function getPlanButtonLabel(plan, isCurrent) {
+      if (isCurrent) return "Seleccionado";
+      if (!currentUser) return `Crear empresa con ${plan.label}`;
+      if (isClientUser(currentUser)) return `Convertirme con ${plan.label}`;
+      return `Elegir ${plan.label}`;
+    }
+
+    plansNote.innerHTML = getPlansNote();
 
     plansGrid.innerHTML = planDefinitions.map(plan => {
-      const isCurrent = user?.plan === plan.key;
+      const isCurrent = currentUser?.plan === plan.key;
 
       return `
         <article class="plan-card ${plan.key === "premium" ? "featured" : ""} ${isCurrent ? "current" : ""}">
@@ -170,17 +207,23 @@
           </div>
 
           <button class="btn btn-primary" type="button" onclick="choosePlan('${plan.key}')" ${isCurrent ? "disabled" : ""}>
-            ${isCurrent ? "Seleccionado" : `Elegir ${plan.label}`}
+            ${getPlanButtonLabel(plan, isCurrent)}
           </button>
         </article>
       `;
     }).join("");
 
     function choosePlan(planKey) {
-      setUserPlan(planKey);
+      const user = getCurrentUser();
 
-      const current = getCurrentUser();
-      window.location.href = isAdmin(current) ? "admin.html" : "dashboard.html";
+      if (!user) {
+        window.location.href = `auth.html?tipo=empresa&plan=${encodeURIComponent(planKey)}`;
+        return;
+      }
+
+      setUserPlan(planKey);
+      const updated = getCurrentUser();
+      window.location.href = isAdmin(updated) ? "admin.html" : "dashboard.html";
     }
   </script>
   <script>
